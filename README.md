@@ -79,5 +79,6 @@ docker exec -it backend-container python seed.py
 
 ## Team
 
-* **Irina:** MongoDB Data Modeling, Spatial Queries, API routing.
-* **Sultan:** Neo4j Graph Modeling, Redis Implementation, Docker Infrastructure.
+* **Irina:** MongoDB (Native Driver), Geo-spatial Queries, Aggregation Pipelines.
+* **Joseph:** Redis (`redis-py`), Caching Strategies (TTL/ZSET), API Orchestration.
+* **Sultan:** Neo4j, Collaborative Filtering, Path Traversal, Streamlit Frontend, Docker.
