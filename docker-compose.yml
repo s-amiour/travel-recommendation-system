@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:  # Define containers (services)
+  mongodb:
+    image: mongo:latest  # Pull latest image of MongoDB from Docker Hub
+    container_name: trs_mongodb  # Assigns human-readable name for container
+    ports:
+      - "27017:27017"  # Maps port 27017 on your actual computer (host) to port 27017 inside the container. This allows you to connect to the database using external tools like MongoDB Compass.
+    volumes:  # Storage Mapping
+      - mongo_data:/data/db
+    restart: unless-stopped  # Automatically restart this container if it crashes or if your computer reboots, unless manually issued a docker stop command.
+
+  neo4j:
+    image: neo4j:latest
+    container_name: trs_neo4j
+    ports:
+      - "7474:7474" # HTTP Browser
+      - "7687:7687" # Bolt port for driver connection
+    environment:
+      - NEO4J_AUTH=neo4j/password123 # Set a default password
+    volumes:
+      - neo4j_data:/data  # storage: Maps a named volume to ensure nodes and relationships survive container restarts.
+    restart: unless-stopped
+
+  redis:
+    image: redis:latest
+    container_name: trs_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data  # storage: Maps a named volume to persist your Redis cache
+    restart: unless-stopped
+
+  backend:
+    build: ./backend  # Instead of downloading a pre-made image from Docker Hub, this tells Docker to look in the ./backend folder, find Dockerfile, and build custom image from scratch.
+    container_name: trs_backend
+    ports:
+      - "8000:8000"
+    depends_on:  # Tells Docker not to start the backend container until the three database containers have started
+      - mongodb
+      - neo4j
+      - redis
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/  # In Docker Compose, containers communicate with each other using their service names as hostnames.
+      - NEO4J_URI=bolt://neo4j:7687  # Connects via the internal Neo4j service name over the Bolt port.
+      - NEO4J_USER=neo4j
+      - NEO4J_PASSWORD=password123
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    volumes:
+      - ./backend:/app  # This is a Bind Mount. Instead of managed volume, it maps local ./backend code folder directly into the container's /app folder. If one edit a Python file on your laptop, the container sees the change immediately, allowing FastAPI to live-reload without rebuilding the container.
+
+
+# This bottom block registers the managed volumes referenced in the services above
+volumes:
+  mongo_data:
+  neo4j_data:
+  redis_data:
