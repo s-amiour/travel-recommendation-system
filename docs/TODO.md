@@ -86,13 +86,14 @@
 
 **Goal:** Build the UI based on the professor's advice.
 
-* [ ] **Joseph (Lead):** Build the Main Dashboard layout in `app.py`.
-  * Set up the sidebar for user simulation.
-  * Fetch and display the top-level Redis "Trending Now" dashboard.
+* [ ] **Sultan:**
+  * Build the Main Dashboard layout in `app.py`.
+    * Set up the sidebar for user simulation.
+    * Fetch and display the top-level Redis "Trending Now" dashboard.
+  * Integrate Network/Recommendation Visualizations.
+    * Display the Neo4j recommendations, clearly showing *why* a place was recommended (e.g., "Because 3 of your 2nd-degree connections visited this!").
 * [ ] **Irina:** Integrate Map Visualizations.
   * Use Streamlit's `st.map` or `folium` to plot the GeoJSON coordinates fetched from MongoDB.
-* [ ] **Sultan:** Integrate Network/Recommendation Visualizations.
-  * Display the Neo4j recommendations, clearly showing *why* a place was recommended (e.g., "Because 3 of your 2nd-degree connections visited this!").
 
 ## Phase 6: Testing, Optimization, & Presentation Prep
 
@@ -100,5 +101,8 @@
 
 * [ ] **Irina:** Run `.explain("executionStats")` on Mongo queries to prove the partial/covering indexes are preventing full collection scans.
 * [ ] **Sultan:** Run `PROFILE` on Cypher queries to ensure variable-length path traversals aren't causing Cartesian products or `AllNodesScan`s.
-* [ ] **Joseph:** Monitor Redis memory and verify the TTL expiration is working correctly using the Redis CLI `TTL dashboard:user:{id}` command.
+* [ ] **Joseph:**
+  * Monitor Redis memory and
+  * Verify the TTL expiration is working correctly using the Redis CLI `TTL dashboard:user:{id}` command.
+  * Initialize presentation of project.
 * [ ] **Together:** Finalize the presentation, defending the polyglot persistence architecture and detailing the specific native-driver implementations used.
