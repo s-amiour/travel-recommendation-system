@@ -1,8 +1,6 @@
 # Travel Recommendation System
 
-This project is a polyglot persistence project designed to recommend next destination suggestions based on a client’s travel history, geographic location, and personal preferences.
-
-By leveraging the unique strengths of three distinct database systems, this project delivers real-time, location-aware, and highly personalized travel recommendations.
+This project is a polyglot persistence project designed to recommend next destination suggestions based on a client’s travel history, geographic location, and personal preferences. By leveraging the unique strengths of three distinct database systems, this project delivers real-time, location-aware, and highly personalized travel recommendations.
 
 ## Architecture Overview
 
@@ -73,6 +71,11 @@ docker exec -it backend-container python seed.py
 * `GET /trending` - Retrieve top 10 trending destinations from Redis.
 * `POST /users/{id}/visit` - Log a visit (updates Neo4j graph and increments Redis ZSET).
 * `GET /dashboard/{user_id}` - Aggregated endpoint leveraging Redis cache for the Streamlit UI.
+
+## Tech Stack
+
+* Frontend: Python (Streamlit)
+* Backend: Python, MongoDB, Neo4j, Redis, Docker
 
 ## Team
 
