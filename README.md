@@ -74,8 +74,9 @@ docker exec -it backend-container python seed.py
 
 ## Tech Stack
 
-* Frontend: Python (Streamlit)
-* Backend: Python, MongoDB, Neo4j, Redis, Docker
+* **Irina:** MongoDB (Native Driver), Geo-spatial Queries, Aggregation Pipelines.
+* **Joseph:** Redis (`redis-py`), Caching Strategies (TTL/ZSET), API Orchestration.
+* **Sultan:** Neo4j, Collaborative Filtering, Path Traversal, Streamlit Frontend, Docker.
 
 ## Team
 
