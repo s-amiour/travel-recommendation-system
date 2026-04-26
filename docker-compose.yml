@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:  # Define containers (services)
   mongodb:
     image: mongo:latest  # Pull latest image of MongoDB from Docker Hub
@@ -34,20 +32,16 @@ services:  # Define containers (services)
       - redis_data:/data
     restart: unless-stopped
 
-  backend:
-	  # Instead of downloading pre-made image, tell Docker look in the ./backend folder,
-    # find Dockerfile, and build custom image from scratch.
+  backend:  # Instead of downloading pre-made image, tell Docker look in the ./backend folder, find Dockerfile, and build custom image from scratch.
     build: ./backend  
     container_name: trs_backend
     ports:
-      - "8000:8000"
-		# Tell Docker not to start backend container until the three DB containers have started
+      - "8000:8000"  # Tell Docker not to start backend container until the three DB containers have started
     depends_on:
       - mongodb
       - neo4j
       - redis
-    environment:
-	    # STRICT LOCAL DEVELOPMENT
+    environment:  # STRICT LOCAL DEVELOPMENT
       - MONGO_URI=mongodb://mongodb:27017/  # In Docker Compose, containers communicate with each other using their service names as hostnames.
       - NEO4J_URI=bolt://neo4j:7687  # Connect via internal Neo4j service name over the Bolt port.
       - NEO4J_USER=neo4j
