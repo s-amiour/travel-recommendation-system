@@ -3,12 +3,13 @@ version: '3.8'
 services:  # Define containers (services)
   mongodb:
     image: mongo:latest  # Pull latest image of MongoDB from Docker Hub
-    container_name: trs_mongodb  # Assigns human-readable name for container
+    container_name: trs_mongodb  # Assign human-readable name for container
     ports:
-      - "27017:27017"  # Maps port 27017 on your actual computer (host) to port 27017 inside the container. This allows you to connect to the database using external tools like MongoDB Compass.
-    volumes:  # Storage Mapping
-      - mongo_data:/data/db
-    restart: unless-stopped  # Automatically restart this container if it crashes or if your computer reboots, unless manually issued a docker stop command.
+      - "27017:27017"  # Map host's port 27017 to port 27017 inside container
+      # This allows connection to database using external tools like MongoDB Compass.
+    volumes:  # Where the service stores its data
+      - mongo_data:/data/db  # Named Volume: named id for storage location
+    restart: unless-stopped  # Automatically restart container if crash or computer reboot, unless manual stop
 
   neo4j:
     image: neo4j:latest
@@ -17,9 +18,11 @@ services:  # Define containers (services)
       - "7474:7474" # HTTP Browser
       - "7687:7687" # Bolt port for driver connection
     environment:
-      - NEO4J_AUTH=neo4j/password123 # Set a default password
+      - NEO4J_AUTH=neo4j/password123
+      # Neo4j is "Secure by default", requiring auth
+      # CREDENTIALS INTENTIONALLY HARDCODED STRICTLY FOR LOCAL DEVELOPMENT
     volumes:
-      - neo4j_data:/data  # storage: Maps a named volume to ensure nodes and relationships survive container restarts.
+      - neo4j_data:/data
     restart: unless-stopped
 
   redis:
@@ -28,30 +31,46 @@ services:  # Define containers (services)
     ports:
       - "6379:6379"
     volumes:
-      - redis_data:/data  # storage: Maps a named volume to persist your Redis cache
+      - redis_data:/data
     restart: unless-stopped
 
   backend:
-    build: ./backend  # Instead of downloading a pre-made image from Docker Hub, this tells Docker to look in the ./backend folder, find Dockerfile, and build custom image from scratch.
+	  # Instead of downloading pre-made image, tell Docker look in the ./backend folder,
+    # find Dockerfile, and build custom image from scratch.
+    build: ./backend  
     container_name: trs_backend
     ports:
       - "8000:8000"
-    depends_on:  # Tells Docker not to start the backend container until the three database containers have started
+		# Tell Docker not to start backend container until the three DB containers have started
+    depends_on:
       - mongodb
       - neo4j
       - redis
     environment:
+	    # STRICT LOCAL DEVELOPMENT
       - MONGO_URI=mongodb://mongodb:27017/  # In Docker Compose, containers communicate with each other using their service names as hostnames.
-      - NEO4J_URI=bolt://neo4j:7687  # Connects via the internal Neo4j service name over the Bolt port.
+      - NEO4J_URI=bolt://neo4j:7687  # Connect via internal Neo4j service name over the Bolt port.
       - NEO4J_USER=neo4j
       - NEO4J_PASSWORD=password123
       - REDIS_HOST=redis
       - REDIS_PORT=6379
     volumes:
-      - ./backend:/app  # This is a Bind Mount. Instead of managed volume, it maps local ./backend code folder directly into the container's /app folder. If one edit a Python file on your laptop, the container sees the change immediately, allowing FastAPI to live-reload without rebuilding the container.
+      - ./backend:/app  
+      # Bind Mount. If file in `/app` is edited, container sees change immediately,
+      # allowing FastAPI to live-reload without rebuilding container.
+
+  frontend:
+    build: ./frontend                  
+    container_name: trs_frontend
+    ports:
+      - "8501:8501"
+    depends_on:
+      - backend  # Don't boot UI until API ready
+    volumes:
+      - ./frontend:/app
 
 
-# This bottom block registers the managed volumes referenced in the services above
+# Registers the managed volumes referenced in the services above
 volumes:
   mongo_data:
   neo4j_data:

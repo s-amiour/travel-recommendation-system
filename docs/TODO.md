@@ -32,7 +32,7 @@
 
 * [ ] **Irina:** Develop MongoDB Destination schemas and Seed logic.
   * Construct BSON documents for 50+ destinations including fields: `name`, `description`, `category`, `status`, and `location` (GeoJSON `Point`).
-    * Find seed data online by searching data given by github repos or APIs, etc.
+    * Find seed data by searching data given by github repos, APIs, or simply AI generating it.
 * [ ] **Sultan:** Develop Neo4j Graph schema and Seed logic.
   * Define nodes: `(User)`, `(Destination)`, `(Category)`.
   * Define relationships: `[:VISITED]`, `[:PREFERS]`, `[:BELONGS_TO]`, and `[:FRIENDS_WITH]` (for path traversals).
