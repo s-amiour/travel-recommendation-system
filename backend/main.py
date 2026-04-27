@@ -57,3 +57,29 @@ app = FastAPI(title="Travel Recommendation API", lifespan=lifespan)
 @app.get("/")
 def read_root():
     return {"status": "API is healthy.", "databases": ["mongodb", "neo4j"]}
+
+# Endpoint
+@app.get("/destinations/near")
+def get_nearby(lat: float, lng: float):
+    results = mongo_db.destinations.find({
+        "location": {
+            "$near": {
+                "$geometry": {
+                    "type": "Point",
+                    "coordinates": [lng, lat]
+                },
+                "$maxDistance": 5000
+            }
+        }
+    })
+
+    destinations = []
+    for doc in results:
+        doc["_id"] = str(doc["_id"]) 
+        destinations.append(doc)
+
+    return destinations
+
+@app.on_event("startup")
+def create_index():
+    mongo_db.destinations.create_index([("location", "2dsphere")])
