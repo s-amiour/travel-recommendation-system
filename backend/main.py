@@ -112,6 +112,41 @@ def search_destinations(
 
     return destinations
 
+@app.get("/destinations/search")
+def search_destinations(
+    country: str = None,
+    category: str = None,
+    min_rating: float = None,
+    limit: int = 10
+):
+    pipeline = []
+
+    match_filter = {}
+
+    if country:
+        match_filter["country"] = country
+
+    if category:
+        match_filter["category"] = category
+
+    if min_rating is not None:
+        match_filter["rating"] = {"$gte": min_rating}
+
+    if match_filter:
+        pipeline.append({"$match": match_filter})
+
+    pipeline.append({"$sort": {"rating": -1, "name": 1}})
+    pipeline.append({"$limit": limit})
+
+    results = mongo_db.destinations.aggregate(pipeline)
+
+    destinations = []
+    for doc in results:
+        doc["_id"] = str(doc["_id"])
+        destinations.append(doc)
+
+    return destinations
+
 @app.on_event("startup")
 def create_index():
     mongo_db.destinations.create_index([("location", "2dsphere")])
