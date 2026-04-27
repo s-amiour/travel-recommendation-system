@@ -36,8 +36,8 @@ services:  # Define containers (services)
     build: ./backend  
     container_name: trs_backend
     ports:
-      - "8000:8000"  # Tell Docker not to start backend container until the three DB containers have started
-    depends_on:
+      - "8000:8000"
+    depends_on:  # Tell Docker not to start backend container until the three DB containers have started
       - mongodb
       - neo4j
       - redis
