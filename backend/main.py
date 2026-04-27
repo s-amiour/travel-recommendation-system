@@ -1,4 +1,5 @@
 import os
+import redis
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from pymongo import MongoClient
@@ -8,10 +9,11 @@ from neo4j import GraphDatabase
 mongo_client = None
 mongo_db = None
 neo4j_driver = None
+redis_client = None
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    global mongo_client, mongo_db, neo4j_driver
+    global mongo_client, mongo_db, neo4j_driver, redis_client
     
     print("Initializing database connection pools...")
     
@@ -37,7 +39,19 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         print(f"Failed to connect to Neo4j: {e}")
 
-    # placeholder for joseph's redis-py
+    # =========  Redis Connection  =========
+    redis_host = os.getenv("REDIS_HOST", "localhost")
+    redis_port = int(os.getenv("REDIS_PORT", 6379))
+    try:
+        redis_client = redis.Redis(
+            host=redis_host,
+            port=redis_port,
+            decode_responses=True
+        )
+        redis_client.ping()
+        print("Successful connection to Redis.")
+    except Exception as e:
+        print(f"Failed to connect to Redis: {e}")
 
     # == Setup Done. Now, `yield` is hit, API starts accepting requests ==
     yield
@@ -49,6 +63,8 @@ async def lifespan(app: FastAPI):
         mongo_client.close()
     if neo4j_driver:
         neo4j_driver.close()
+    if redis_client:
+        redis_client.close()
 
 # Initialize the FastAPI app with our connection pools
 app = FastAPI(title="Travel Recommendation API", lifespan=lifespan)
@@ -56,7 +72,7 @@ app = FastAPI(title="Travel Recommendation API", lifespan=lifespan)
 # Test route
 @app.get("/")
 def read_root():
-    return {"status": "API is healthy.", "databases": ["mongodb", "neo4j"]}
+    return {"status": "API is healthy.", "databases": ["mongodb", "neo4j", "redis"]}
 
 # Endpoint
 @app.get("/destinations/near")
