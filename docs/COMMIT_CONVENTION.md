@@ -1,6 +1,6 @@
 # Conventional Commit Messages
 
-[Conventional Commits](https://www.conventionalcommits.org/) to ensure consistency in commit messages and enable automated changelog generation.
+[Conventional Commits](https://www.conventionalcommits.org/) to ensure consistency in commit messages.
 
 ## Format
 
@@ -88,13 +88,8 @@ git commit -m "feat(auth): implement biometric authentication" -m "my body"
 git commit -m "my subject" -m "my body" -m "my footer"
 ```
 
-## Enforcing Convention
-
-This repository uses a git hook to enforce conventional commit messages. If your commit message doesn't follow the convention, the commit will be rejected with an error message explaining the issue.
-
 ## Benefits
 
-- Automatic changelog generation
 - Semantic versioning based on commit types
 - Clear project history
 - Easier for new contributors to understand commit expectations
