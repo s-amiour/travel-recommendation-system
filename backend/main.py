@@ -22,6 +22,7 @@ async def lifespan(app: FastAPI):
         mongo_client = MongoClient(mongo_uri)
         mongo_db = mongo_client["travel_db"]  # This will create the DB automatically if it doesn't exist
         mongo_client.admin.command('ping')  # Test the connection
+        mongo_db.destinations.create_index([("location", "2dsphere")])
         print("Successful connection to MongoDB.")
     except Exception as e:
         print(f"Failed to connect to MongoDB: {e}")
@@ -83,46 +84,14 @@ def get_nearby(lat: float, lng: float):
 @app.get("/destinations/search")
 def search_destinations(
     country: str = None,
-    limit: int = 5
-):
-    pipeline = []
-
-    # filter by country if provided
-    if country:
-        pipeline.append({
-            "$match": {"country": country}
-        })
-
-    # sort results alphabetically
-    pipeline.append({
-        "$sort": {"name": 1}
-    })
-
-    # limit number of results
-    pipeline.append({
-        "$limit": limit
-    })
-
-    results = mongo_db.destinations.aggregate(pipeline)
-
-    destinations = []
-    for doc in results:
-        doc["_id"] = str(doc["_id"])
-        destinations.append(doc)
-
-    return destinations
-
-@app.get("/destinations/search")
-def search_destinations(
-    country: str = None,
     category: str = None,
     min_rating: float = None,
     limit: int = 10
 ):
     pipeline = []
-
     match_filter = {}
 
+    # filter by country if provided
     if country:
         match_filter["country"] = country
 
@@ -147,6 +116,51 @@ def search_destinations(
 
     return destinations
 
-@app.on_event("startup")
-def create_index():
-    mongo_db.destinations.create_index([("location", "2dsphere")])
+
+@app.get("/destinations/advanced-search")
+def advanced_search(
+    lat: float,
+    lng: float,
+    country: str = None,
+    category: str = None,
+    min_rating: float = None,
+    limit: int = 10
+):
+    pipeline = [
+        {
+            "$geoNear": {
+                "near": {
+                    "type": "Point",
+                    "coordinates": [lng, lat]
+                },
+                "distanceField": "distance",
+                "maxDistance": 5000,
+                "spherical": True
+            }
+        }
+    ]
+
+    match_filter = {}
+
+    if country:
+        match_filter["country"] = country
+
+    if category:
+        match_filter["category"] = category
+
+    if min_rating is not None:
+        match_filter["rating"] = {"$gte": min_rating}
+
+    if match_filter:
+        pipeline.append({"$match": match_filter})
+
+    pipeline.append({"$limit": limit})
+
+    results = mongo_db.destinations.aggregate(pipeline)
+
+    destinations = []
+    for doc in results:
+        doc["_id"] = str(doc["_id"])
+        destinations.append(doc)
+
+    return destinations
