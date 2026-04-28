@@ -2,3 +2,6 @@ fastapi
 uvicorn
 pymongo
 neo4j
+neo4j
+redis
+python-dotenv
