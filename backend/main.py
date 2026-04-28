@@ -61,7 +61,7 @@ def read_root():
 
 # Endpoint
 @app.get("/destinations/near")
-def get_nearby(lat: float, lng: float):
+def get_nearby(lat: float, lng: float, radius: int = 5000, limit: int = 10):
     results = mongo_db.destinations.find({
         "location": {
             "$near": {
@@ -69,14 +69,14 @@ def get_nearby(lat: float, lng: float):
                     "type": "Point",
                     "coordinates": [lng, lat]
                 },
-                "$maxDistance": 5000
+                "$maxDistance": radius
             }
         }
-    })
+    }).limit(limit)
 
     destinations = []
     for doc in results:
-        doc["_id"] = str(doc["_id"]) 
+        doc["_id"] = str(doc["_id"])
         destinations.append(doc)
 
     return destinations
