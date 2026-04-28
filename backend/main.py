@@ -154,7 +154,8 @@ def advanced_search(
 
     if match_filter:
         pipeline.append({"$match": match_filter})
-
+    
+    pipeline.append({"$sort": {"distance": 1}})
     pipeline.append({"$limit": limit})
 
     results = mongo_db.destinations.aggregate(pipeline)
