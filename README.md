@@ -20,6 +20,14 @@ The architecture of the project will utilise microservices orchestrated via Dock
   * Implements a 1-hour TTL dashboard cache to optimize heavy query execution.
 * **Infrastructure:** Docker & Docker Compose
 
+## MongoDB Features
+
+- Geospatial search using a `2dsphere` index
+- Nearby destination search with configurable radius and limit
+- Aggregation pipeline for filtering by country, category, and rating
+- Advanced search combining geospatial queries with filters
+- Distance-based sorting for nearby destination results
+
 ## Features to be Implemented
 
 1. **Geolocation Search:** Instantly find destinations within a specific radius of the user's current coordinates.
