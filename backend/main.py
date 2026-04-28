@@ -124,6 +124,7 @@ def advanced_search(
     country: str = None,
     category: str = None,
     min_rating: float = None,
+    radius: int = 5000,
     limit: int = 10
 ):
     pipeline = [
@@ -134,7 +135,7 @@ def advanced_search(
                     "coordinates": [lng, lat]
                 },
                 "distanceField": "distance",
-                "maxDistance": 5000,
+                "maxDistance": radius,
                 "spherical": True
             }
         }
