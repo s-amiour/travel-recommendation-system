@@ -27,6 +27,7 @@ async def lifespan(app: FastAPI):
         # This will create the DB automatically if it doesn't exist
         mongo_db = mongo_client["travel_db"]
         mongo_client.admin.command('ping')  # Test the connection
+        mongo_db.destinations.create_index([("location", "2dsphere")])
         print("Successful connection to MongoDB.")
     except Exception as e:
         print(f"Failed to connect to MongoDB: {e}")
@@ -147,6 +148,11 @@ def get_trending_destinations(limit: int = 10):
 @app.get("/users/{user_id}/recommendations")
 def get_recommendations(user_id: str):
     query = """
+@app.get("/dashboard/{user_id}")
+def get_dashboard(user_id: str, lat: float, lng: float):
+
+    # --- recommendations (Neo4j) ---
+    rec_query = """
     MATCH (u:User {id: $user_id})-[:VISITED]->(d:Destination)
     MATCH (d)<-[:VISITED]-(other:User)-[:VISITED]->(rec:Destination)
     WHERE NOT (u)-[:VISITED]->(rec)
@@ -170,3 +176,48 @@ def get_recommendations(user_id: str):
 @app.on_event("startup")
 def create_index():
     mongo_db.destinations.create_index([("location", "2dsphere")])
+    LIMIT 5
+    """
+
+    with neo4j_driver.session() as session:
+        rec_results = session.run(rec_query, user_id=user_id)
+        recommendations = [
+            {"destination_id": r["destination_id"], "score": r["score"]}
+            for r in rec_results
+        ]
+
+    # --- trending (Redis) ---
+    trending = redis_client.zrevrange(
+        "trending_destinations", 0, 4, withscores=True
+    )
+
+    trending_result = [
+        {"destination_id": d, "score": s}
+        for d, s in trending
+    ]
+
+    # --- nearby (MongoDB) ---
+    nearby_cursor = mongo_db.destinations.find({
+        "location": {
+            "$near": {
+                "$geometry": {
+                    "type": "Point",
+                    "coordinates": [lng, lat]
+                },
+                "$maxDistance": 5000
+            }
+        }
+    }).limit(5)
+
+    nearby = []
+    for doc in nearby_cursor:
+        doc["_id"] = str(doc["_id"])
+        nearby.append(doc)
+
+    return {
+        "recommendations": recommendations,
+        "trending": trending_result,
+        "nearby": nearby
+    }
+    
+
