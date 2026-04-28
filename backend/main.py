@@ -4,6 +4,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from pymongo import MongoClient
 from neo4j import GraphDatabase
+import json
 
 # Global variables to hold our database connection pools
 mongo_client = None
@@ -107,6 +108,7 @@ def get_nearby(lat: float, lng: float):
 @app.post("/destinations/{destination_id}/visit")
 def log_destination_visit(destination_id: str):
     redis_client.zincrby("trending_destinations", 1, destination_id)
+    redis_client.delete("trending:top:10")
 
     return {
         "status": "visit logged",
@@ -116,6 +118,12 @@ def log_destination_visit(destination_id: str):
 
 @app.get("/trending")
 def get_trending_destinations(limit: int = 10):
+    cache_key = f"trending:top:{limit}"
+
+    cached_result = redis_client.get(cache_key)
+    if cached_result:
+        return json.loads(cached_result)
+
     trending = redis_client.zrevrange(
         "trending_destinations",
         0,
@@ -123,13 +131,17 @@ def get_trending_destinations(limit: int = 10):
         withscores=True
     )
 
-    return [
+    result = [
         {
             "destination_id": destination_id,
             "score": score
         }
         for destination_id, score in trending
     ]
+
+    redis_client.setex(cache_key, 3600, json.dumps(result))
+
+    return result
 
 
 @app.on_event("startup")
