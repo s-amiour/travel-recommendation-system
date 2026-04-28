@@ -15,16 +15,16 @@
 
 **Goal:** Establish containerized environment and verify connections.
 
-* [ ] **Sultan:** Create the `docker-compose.yml` file.
+* [x] **Sultan:** Create the `docker-compose.yml` file.
   * Provision 4 services: `mongodb`, `neo4j`, `redis`, and `backend` (FastAPI).
   * Ensure data persistence by mapping volumes for MongoDB (`/data/db`), Neo4j (`/data`), and Redis.
   * Create the initial `app.py` Streamlit file and verify it can hit the FastAPI backend set up by Irina.
-* [ ] **Irina:** Initialize Python Backend skeleton & Core DB Pools.
+* [x] **Irina:** Initialize Python Backend skeleton & Core DB Pools.
   * Set up the FastAPI app.
   * Establish connection pools using `pymongo` (MongoDB) and the `neo4j` native driver.
-* [ ] **Joseph:** Initialize Redis Pool.
+* [x] **Joseph:** Initialize Redis Pool.
   * Establish the `redis-py` connection pool in the backend.
-* [ ] **Together:** Boot the environment (`docker-compose up -d`) and test basic ping connections to all three databases.
+* [x] **Together:** Boot the environment (`docker-compose up -d`) and test basic ping connections to all three databases.
 
 ## Phase 2: Data Modeling & The Seed Script
 
