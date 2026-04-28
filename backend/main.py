@@ -144,6 +144,29 @@ def get_trending_destinations(limit: int = 10):
     return result
 
 
+@app.get("/users/{user_id}/recommendations")
+def get_recommendations(user_id: str):
+    query = """
+    MATCH (u:User {id: $user_id})-[:VISITED]->(d:Destination)
+    MATCH (d)<-[:VISITED]-(other:User)-[:VISITED]->(rec:Destination)
+    WHERE NOT (u)-[:VISITED]->(rec)
+    RETURN rec.id AS destination_id, count(*) AS score
+    ORDER BY score DESC
+    LIMIT 10
+    """
+
+    with neo4j_driver.session() as session:
+        results = session.run(query, user_id=user_id)
+
+        return [
+            {
+                "destination_id": record["destination_id"],
+                "score": record["score"]
+            }
+            for record in results
+        ]
+
+
 @app.on_event("startup")
 def create_index():
     mongo_db.destinations.create_index([("location", "2dsphere")])
