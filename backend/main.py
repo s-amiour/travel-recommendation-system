@@ -1,4 +1,5 @@
 import os
+import json
 import redis
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
@@ -180,3 +181,96 @@ def advanced_search(
         destinations.append(doc)
 
     return destinations
+
+
+@app.post("/destinations/{destination_id}/visit")
+def log_destination_visit(destination_id: str):
+    redis_client.zincrby("trending_destinations", 1, destination_id)
+    redis_client.delete("trending:top:10")
+
+    return {
+        "status": "visit logged",
+        "destination_id": destination_id
+    }
+
+
+@app.get("/trending")
+def get_trending_destinations(limit: int = 10):
+    cache_key = f"trending:top:{limit}"
+
+    cached_result = redis_client.get(cache_key)
+    if cached_result:
+        return json.loads(cached_result)
+
+    trending = redis_client.zrevrange(
+        "trending_destinations",
+        0,
+        limit - 1,
+        withscores=True
+    )
+
+    result = [
+        {
+            "destination_id": destination_id,
+            "score": score
+        }
+        for destination_id, score in trending
+    ]
+
+    redis_client.setex(cache_key, 3600, json.dumps(result))
+
+    return result
+
+
+@app.get("/dashboard/{user_id}")
+def get_dashboard(user_id: str, lat: float, lng: float):
+    rec_query = """
+    MATCH (u:User {id: $user_id})-[:VISITED]->(d:Destination)
+    MATCH (d)<-[:VISITED]-(other:User)-[:VISITED]->(rec:Destination)
+    WHERE NOT (u)-[:VISITED]->(rec)
+    RETURN rec.id AS destination_id, count(*) AS score
+    ORDER BY score DESC
+    LIMIT 5
+    """
+
+    with neo4j_driver.session() as session:
+        rec_results = session.run(rec_query, user_id=user_id)
+        recommendations = [
+            {"destination_id": r["destination_id"], "score": r["score"]}
+            for r in rec_results
+        ]
+
+    trending = redis_client.zrevrange(
+        "trending_destinations",
+        0,
+        4,
+        withscores=True
+    )
+
+    trending_result = [
+        {"destination_id": d, "score": s}
+        for d, s in trending
+    ]
+
+    nearby_cursor = mongo_db.destinations.find({
+        "location": {
+            "$near": {
+                "$geometry": {
+                    "type": "Point",
+                    "coordinates": [lng, lat]
+                },
+                "$maxDistance": 5000
+            }
+        }
+    }).limit(5)
+
+    nearby = []
+    for doc in nearby_cursor:
+        doc["_id"] = str(doc["_id"])
+        nearby.append(doc)
+
+    return {
+        "recommendations": recommendations,
+        "trending": trending_result,
+        "nearby": nearby
+    }
