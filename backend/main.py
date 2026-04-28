@@ -9,18 +9,20 @@ mongo_client = None
 mongo_db = None
 neo4j_driver = None
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global mongo_client, mongo_db, neo4j_driver
-    
+
     print("Initializing database connection pools...")
-    
+
     # =========  MongoDB Connection  =========
     # Grab URI from Docker Compose, defaults to localhost for testing outside Docker
     mongo_uri = os.getenv("MONGO_URI", "mongodb://localhost:27017/")
     try:
         mongo_client = MongoClient(mongo_uri)
-        mongo_db = mongo_client["travel_db"]  # This will create the DB automatically if it doesn't exist
+        # This will create the DB automatically if it doesn't exist
+        mongo_db = mongo_client["travel_db"]
         mongo_client.admin.command('ping')  # Test the connection
         mongo_db.destinations.create_index([("location", "2dsphere")])
         print("Successful connection to MongoDB.")
@@ -32,7 +34,8 @@ async def lifespan(app: FastAPI):
     neo4j_user = os.getenv("NEO4J_USER", "neo4j")
     neo4j_password = os.getenv("NEO4J_PASSWORD", "password123")
     try:
-        neo4j_driver = GraphDatabase.driver(neo4j_uri, auth=(neo4j_user, neo4j_password))
+        neo4j_driver = GraphDatabase.driver(
+            neo4j_uri, auth=(neo4j_user, neo4j_password))
         neo4j_driver.verify_connectivity()  # Test the connection
         print("Successful connection to Neo4j.")
     except Exception as e:
@@ -43,7 +46,7 @@ async def lifespan(app: FastAPI):
     # == Setup Done. Now, `yield` is hit, API starts accepting requests ==
     yield
     # == `lifespan` is called for the second time: meaning Shutdown Phase ==
-    
+
     # Cleanup resources
     print("Shut down: Closing database connections...")
     if mongo_client:
@@ -55,11 +58,15 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title="Travel Recommendation API", lifespan=lifespan)
 
 # Test route
+
+
 @app.get("/")
 def read_root():
     return {"status": "API is healthy.", "databases": ["mongodb", "neo4j"]}
 
 # Endpoint
+
+
 @app.get("/destinations/near")
 def get_nearby(lat: float, lng: float, radius: int = 5000, limit: int = 10):
     results = mongo_db.destinations.find({
@@ -81,11 +88,13 @@ def get_nearby(lat: float, lng: float, radius: int = 5000, limit: int = 10):
 
     return destinations
 
+
 @app.get("/destinations/search")
 def search_destinations(
     country: str = None,
     category: str = None,
     min_rating: float = None,
+    skip: int = 0,
     limit: int = 10
 ):
     pipeline = []
@@ -105,6 +114,7 @@ def search_destinations(
         pipeline.append({"$match": match_filter})
 
     pipeline.append({"$sort": {"rating": -1, "name": 1}})
+    pipeline.append({"$skip": skip})
     pipeline.append({"$limit": limit})
 
     results = mongo_db.destinations.aggregate(pipeline)
@@ -154,7 +164,7 @@ def advanced_search(
 
     if match_filter:
         pipeline.append({"$match": match_filter})
-    
+
     pipeline.append({"$sort": {"distance": 1}})
     pipeline.append({"$limit": limit})
 
