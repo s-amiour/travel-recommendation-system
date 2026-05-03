@@ -1,17 +1,22 @@
 FROM python:3.9-slim
 
 # Set working directory inside the container
-WORKDIR /app
+WORKDIR /backend
 
 # Copy requirements file and install dependencies
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+COPY requirements.txt /backend/requirements.txt
+RUN pip install --no-cache-dir -r /backend/requirements.txt
 
-# Copy backend/ codebase (detects dockerfile's location folder is and copies all files in it)
-COPY . .
+COPY seed.py /backend/seed.py
 
-# Expose the port FastAPI runs on
+# Copy /app codebase (detects dockerfile's location folder is and copies all files in it)
+COPY /app /backend/app
+
+# Expose the port fastapi runs on
 EXPOSE 8000
 
-# Run the application using Uvicorn
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+# Inject db seed
+RUN python /backend/seed.py
+
+# Run the application using uvicorn
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

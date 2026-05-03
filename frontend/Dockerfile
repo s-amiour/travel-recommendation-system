@@ -1,10 +1,10 @@
 FROM python:3.9-slim
 
-# Set the working directory
-WORKDIR /app
+# Set working directory
+WORKDIR /frontend
 
-# Copy the requirements and install them
-COPY requirements.txt .
+# Copy requirements and install
+COPY requirements.txt /frontend/requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy frontend/ codebase (detects dockerfile's location folder is and copies all files in it)
