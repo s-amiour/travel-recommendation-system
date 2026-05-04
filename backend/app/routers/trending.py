@@ -1,6 +1,6 @@
 import json
 from fastapi import APIRouter
-from database import db
+from app.database import db
 
 router = APIRouter(prefix="/trending", tags=["Trending"])
 
@@ -18,7 +18,7 @@ router = APIRouter(prefix="/trending", tags=["Trending"])
     list: Objects each containing destination ID alongside popularity score.
 
 """
-@router.get("/trending")
+@router.get("/")
 def get_trending_destinations(limit: int = 10):
     cache_key = f"trending:top:{limit}"
 

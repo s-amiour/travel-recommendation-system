@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
-from database import connect_databases, close_databases
-from routers import destinations, trending, dashboard
+from app.database import connect_databases, close_databases
+from app.routers import destinations, trending, dashboard
 
 # Ensure connections start when container boots up; cleanly close when container shuts down.
 @asynccontextmanager
