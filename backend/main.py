@@ -148,11 +148,10 @@ def get_trending_destinations(limit: int = 10):
 @app.get("/dashboard/{user_id}")
 def get_dashboard(user_id: str, lat: float, lng: float):
 
-    # --- recommendations (Neo4j) ---
+    # --- recommendations by friends (Neo4j) ---
     rec_query = """
-    MATCH (u:User {id: $user_id})-[:VISITED]->(d:Destination)
-    MATCH (d)<-[:VISITED]-(other:User)-[:VISITED]->(rec:Destination)
-    WHERE NOT (u)-[:VISITED]->(rec)
+    MATCH (u:User {id: $user_id})-[:FRIENDS_WITH]-(friend:User)-[v:VISITED]->(rec:Destination)
+    WHERE v.rating >= 4 AND NOT (u)-[:VISITED]->(rec)
     RETURN rec.id AS destination_id, count(*) AS score
     ORDER BY score DESC
     LIMIT 5
@@ -181,6 +180,7 @@ def get_dashboard(user_id: str, lat: float, lng: float):
             "$near": {
                 "$geometry": {
                     "type": "Point",
+                    
                     "coordinates": [lng, lat]
                 },
                 "$maxDistance": 5000
@@ -198,5 +198,3 @@ def get_dashboard(user_id: str, lat: float, lng: float):
         "trending": trending_result,
         "nearby": nearby
     }
-    
-
