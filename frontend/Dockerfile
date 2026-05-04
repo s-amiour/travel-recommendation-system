@@ -4,11 +4,11 @@ FROM python:3.9-slim
 WORKDIR /frontend
 
 # Copy requirements and install
-COPY requirements.txt /frontend/requirements.txt
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy frontend/ codebase (detects dockerfile's location folder is and copies all files in it)
-COPY . /frontend
+COPY . .
 
 EXPOSE 8501
 
