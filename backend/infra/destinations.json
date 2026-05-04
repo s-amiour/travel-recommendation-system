@@ -1,0 +1,72 @@
+[
+  {
+    "_id": "",
+    "name": "Ibiza Resort",
+    "location": {
+      "type": "Point",
+      "coordinates": [1.4329, 38.9067]
+    },
+    "status": "active",
+    "category": "beach",
+    "price_tier": "$$$",
+    "climate": "tropical",
+    "description": "World-famous party and relaxation destination in the Mediterranean.",
+    "fun_facts": ["Over 50 beaches", "UNESCO World Heritage site"]
+  },
+  {
+    "_id": "",
+    "name": "Colosseum",
+    "location": {
+      "type": "Point",
+      "coordinates": [12.4922, 41.8902]
+    },
+    "status": "active",
+    "category": "historical",
+    "price_tier": "$$",
+    "climate": "temperate",
+    "description": "Ancient Roman gladiatorial arena in Rome.",
+    "fun_facts": ["Built in 80 AD", "Held up to 50,000 spectators"]
+  },
+  {
+    "_id": "",
+    "name": "Eiffel Tower",
+    "location": {
+      "type": "Point",
+      "coordinates": [2.2945, 48.8584]
+    },
+    "status": "active",
+    "category": "landmark",
+    "price_tier": "$$",
+    "climate": "temperate",
+    "description": "Iconic iron tower in Paris.",
+    "fun_facts": ["324 meters tall", "Built in 1889"]
+  },
+  {
+    "_id": "",
+    "name": "Bali Beach",
+    "location": {
+      "type": "Point",
+      "coordinates": [115.1889, -8.4095]
+    },
+    "status": "active",
+    "category": "beach",
+    "price_tier": "$$",
+    "climate": "tropical",
+    "description": "Popular Indonesian island known for beaches and temples.",
+    "fun_facts": ["Called Island of Gods", "Famous for surfing"]
+  },
+  {
+    "_id": "",
+    "name": "Grand Canyon",
+    "location": {
+      "type": "Point",
+      "coordinates": [-112.1401, 36.0544]
+    },
+    "status": "active",
+    "category": "nature",
+    "price_tier": "$",
+    "climate": "dry",
+    "description": "Massive canyon carved by the Colorado River.",
+    "fun_facts": ["277 miles long", "Visible from space (kind of)"]
+  }
+]
