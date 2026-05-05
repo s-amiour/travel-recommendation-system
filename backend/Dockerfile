@@ -11,9 +11,9 @@ COPY infra ./infra
 COPY app ./app
 
 # grant execute permissions to the file
-RUN chmod +x /backend/infra/entrypoint.sh
+RUN chmod +x ./infra/entrypoint.sh
 
 EXPOSE 8000
 
 # Run app using uvicorn
-CMD ["/backend/infra/entrypoint.sh"]
+CMD ["./infra/entrypoint.sh"]
