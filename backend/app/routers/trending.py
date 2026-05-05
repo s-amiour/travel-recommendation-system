@@ -20,6 +20,7 @@ router = APIRouter(prefix="/trending", tags=["Trending"])
 """
 @router.get("/")
 def get_trending_destinations(limit: int = 10):
+    # Cache-Aside pattern
     cache_key = f"trending:top:{limit}"
 
     cached_result = db.redis_client.get(cache_key)
