@@ -10,22 +10,134 @@
     "category": "beach",
     "price_tier": "$$$",
     "climate": "tropical",
-    "description": "World-famous party and relaxation destination in the Mediterranean.",
-    "fun_facts": ["Over 50 beaches", "UNESCO World Heritage site"]
+    "description": "World-famous party and relaxation destination located in the Mediterranean Sea.",
+    "fun_facts": ["Has over 50 beaches", "UNESCO World Heritage site"]
   },
   {
     "_id": "",
-    "name": "Colosseum",
+    "name": "The Colosseum",
     "location": {
       "type": "Point",
       "coordinates": [12.4922, 41.8902]
     },
     "status": "active",
-    "category": "historical",
+    "category": "historic",
     "price_tier": "$$",
     "climate": "temperate",
-    "description": "Ancient Roman gladiatorial arena in Rome.",
-    "fun_facts": ["Built in 80 AD", "Held up to 50,000 spectators"]
+    "description": "An ancient amphitheater in the center of Rome, the largest ever built.",
+    "fun_facts": ["Could hold an estimated 50,000 to 80,000 spectators", "Used for gladiatorial contests"]
+  },
+  {
+    "_id": "",
+    "name": "Whistler Blackcomb",
+    "location": {
+      "type": "Point",
+      "coordinates": [-122.9574, 50.1163]
+    },
+    "status": "active",
+    "category": "ski",
+    "price_tier": "$$$",
+    "climate": "alpine",
+    "description": "A major ski resort in British Columbia, Canada, offering incredible winter sports.",
+    "fun_facts": ["Hosted the 2010 Winter Olympics", "Has over 200 marked ski trails"]
+  },
+  {
+    "_id": "",
+    "name": "Machu Picchu",
+    "location": {
+      "type": "Point",
+      "coordinates": [-72.5450, -13.1631]
+    },
+    "status": "active",
+    "category": "historic",
+    "price_tier": "$$",
+    "climate": "subtropical",
+    "description": "A 15th-century Inca citadel located in the Eastern Cordillera of southern Peru.",
+    "fun_facts": ["Built without the use of mortar", "Often referred to as the 'Lost City of the Incas'"]
+  },
+  {
+    "_id": "",
+    "name": "Times Square",
+    "location": {
+      "type": "Point",
+      "coordinates": [-73.9851, 40.7580]
+    },
+    "status": "active",
+    "category": "city",
+    "price_tier": "$$$",
+    "climate": "temperate",
+    "description": "A major commercial intersection, tourist destination, and entertainment center in Midtown Manhattan.",
+    "fun_facts": ["One of the world's most visited tourist attractions", "Famous for its annual New Year's Eve ball drop"]
+  },
+  {
+    "_id": "",
+    "name": "Great Barrier Reef",
+    "location": {
+      "type": "Point",
+      "coordinates": [147.6992, -18.2871]
+    },
+    "status": "active",
+    "category": "nature",
+    "price_tier": "$$$",
+    "climate": "tropical",
+    "description": "The world's largest coral reef system composed of over 2,900 individual reefs.",
+    "fun_facts": ["Can be seen from outer space", "Home to countless species of colorful fish and marine life"]
+  },
+  {
+    "_id": "",
+    "name": "Kyoto Temples",
+    "location": {
+      "type": "Point",
+      "coordinates": [135.7681, 35.0116]
+    },
+    "status": "active",
+    "category": "historic",
+    "price_tier": "$$",
+    "climate": "temperate",
+    "description": "The cultural capital of Japan, famous for its numerous classical Buddhist temples, gardens, and imperial palaces.",
+    "fun_facts": ["Spared from bombing during WWII due to its historic value", "Features over 1,000 temples"]
+  },
+  {
+    "_id": "",
+    "name": "Santorini Caldera",
+    "location": {
+      "type": "Point",
+      "coordinates": [25.4615, 36.3932]
+    },
+    "status": "active",
+    "category": "beach",
+    "price_tier": "$$$",
+    "climate": "mediterranean",
+    "description": "A stunning island in the Aegean Sea known for its white-washed, cubiform houses overlooking the ocean.",
+    "fun_facts": ["Formed by one of the largest volcanic eruptions in recorded history", "Famous for breathtaking sunsets"]
+  },
+  {
+    "_id": "",
+    "name": "Banff National Park",
+    "location": {
+      "type": "Point",
+      "coordinates": [-115.5708, 51.1784]
+    },
+    "status": "active",
+    "category": "nature",
+    "price_tier": "$",
+    "climate": "alpine",
+    "description": "Canada's oldest national park, encompassing mountainous terrain, numerous glaciers, and dense coniferous forest.",
+    "fun_facts": ["Known for its brilliantly turquoise glacial lakes", "Offers incredible wildlife viewing opportunities"]
+  },
+  {
+    "_id": "",
+    "name": "Mount Fuji Summit",
+    "location": {
+      "type": "Point",
+      "coordinates": [138.7274, 35.3606]
+    },
+    "status": "closed",
+    "category": "nature",
+    "price_tier": "$",
+    "climate": "alpine",
+    "description": "Japan's highest mountain and an active stratovolcano, typically only open for climbing in the summer.",
+    "fun_facts": ["Considered one of Japan's three holy mountains", "Perfectly symmetrical cone is a well-known symbol of Japan"]
   },
   {
     "_id": "",
@@ -35,38 +147,556 @@
       "coordinates": [2.2945, 48.8584]
     },
     "status": "active",
-    "category": "landmark",
-    "price_tier": "$$",
+    "category": "city",
+    "price_tier": "$$$",
     "climate": "temperate",
-    "description": "Iconic iron tower in Paris.",
-    "fun_facts": ["324 meters tall", "Built in 1889"]
-  },
-  {
-    "_id": "",
-    "name": "Bali Beach",
-    "location": {
-      "type": "Point",
-      "coordinates": [115.1889, -8.4095]
-    },
-    "status": "active",
-    "category": "beach",
-    "price_tier": "$$",
-    "climate": "tropical",
-    "description": "Popular Indonesian island known for beaches and temples.",
-    "fun_facts": ["Called Island of Gods", "Famous for surfing"]
+    "description": "A wrought-iron lattice tower on the Champ de Mars in Paris, France.",
+    "fun_facts": ["Constructed from 1887 to 1889", "It was initially criticized by some of France's leading artists"]
   },
   {
     "_id": "",
     "name": "Grand Canyon",
     "location": {
       "type": "Point",
-      "coordinates": [-112.1401, 36.0544]
+      "coordinates": [-112.1129, 36.1069]
     },
     "status": "active",
     "category": "nature",
     "price_tier": "$",
-    "climate": "dry",
-    "description": "Massive canyon carved by the Colorado River.",
-    "fun_facts": ["277 miles long", "Visible from space (kind of)"]
+    "climate": "arid",
+    "description": "A steep-sided canyon carved by the Colorado River in Arizona, United States.",
+    "fun_facts": ["It is 277 miles long and up to 18 miles wide", "Reveals nearly two billion years of Earth's geological history"]
+  },
+  {
+    "_id": "",
+    "name": "Zermatt Ski Resort",
+    "location": {
+      "type": "Point",
+      "coordinates": [7.7491, 46.0207]
+    },
+    "status": "active",
+    "category": "ski",
+    "price_tier": "$$$",
+    "climate": "alpine",
+    "description": "A renowned alpine resort in southern Switzerland, known for skiing, climbing and hiking.",
+    "fun_facts": ["Lies right below the iconic, pyramid-shaped Matterhorn peak", "The town is a car-free zone"]
+  },
+  {
+    "_id": "",
+    "name": "Pyramids of Giza",
+    "location": {
+      "type": "Point",
+      "coordinates": [31.1342, 29.9792]
+    },
+    "status": "active",
+    "category": "historic",
+    "price_tier": "$",
+    "climate": "desert",
+    "description": "Ancient pyramid structures located on the Giza Plateau bordering Cairo, Egypt.",
+    "fun_facts": ["The Great Pyramid is the oldest of the Seven Wonders of the Ancient World", "Built as tombs for the country's pharaohs"]
+  },
+  {
+    "_id": "",
+    "name": "Bora Bora",
+    "location": {
+      "type": "Point",
+      "coordinates": [-151.7415, -16.5004]
+    },
+    "status": "active",
+    "category": "beach",
+    "price_tier": "$$$",
+    "climate": "tropical",
+    "description": "A small South Pacific island northwest of Tahiti in French Polynesia, surrounded by sand-fringed motus.",
+    "fun_facts": ["Famous for its luxury aqua-centric luxury resorts", "The island is heavily dependent on tourism"]
+  },
+  {
+    "_id": "",
+    "name": "Yellowstone Caldera",
+    "location": {
+      "type": "Point",
+      "coordinates": [-110.5885, 44.4280]
+    },
+    "status": "active",
+    "category": "nature",
+    "price_tier": "$$",
+    "climate": "alpine",
+    "description": "A volcanic caldera and supervolcano in Yellowstone National Park in the Western United States.",
+    "fun_facts": ["Contains half of the world's hydrothermal features", "Famous for the Old Faithful geyser"]
+  },
+  {
+    "_id": "",
+    "name": "Burj Khalifa",
+    "location": {
+      "type": "Point",
+      "coordinates": [55.2708, 25.1972]
+    },
+    "status": "active",
+    "category": "city",
+    "price_tier": "$$$",
+    "climate": "arid",
+    "description": "A skyscraper in Dubai, United Arab Emirates, and the tallest structure and building in the world.",
+    "fun_facts": ["Stands at a total height of 829.8 meters", "Features the world's highest observation deck"]
+  },
+  {
+    "_id": "",
+    "name": "Stonehenge",
+    "location": {
+      "type": "Point",
+      "coordinates": [-1.8262, 51.1789]
+    },
+    "status": "active",
+    "category": "historic",
+    "price_tier": "$$",
+    "climate": "temperate",
+    "description": "A prehistoric monument on Salisbury Plain in Wiltshire, England.",
+    "fun_facts": ["Consists of an outer ring of vertical sarsen standing stones", "Believed to have been constructed from 3000 BC to 2000 BC"]
+  },
+  {
+    "_id": "",
+    "name": "Copacabana Beach",
+    "location": {
+      "type": "Point",
+      "coordinates": [-43.1805, -22.9711]
+    },
+    "status": "active",
+    "category": "beach",
+    "price_tier": "$$",
+    "climate": "tropical",
+    "description": "A world-famous neighborhood in the South Zone of Rio de Janeiro, known for its 4 km balneario beach.",
+    "fun_facts": ["Host to millions of revelers during the annual New Year's Eve celebrations", "The promenade features a distinct geometric wave pattern"]
+  },
+  {
+    "_id": "",
+    "name": "Chichen Itza",
+    "location": {
+      "type": "Point",
+      "coordinates": [-88.5678, 20.6843]
+    },
+    "status": "closed",
+    "category": "historic",
+    "price_tier": "$$",
+    "climate": "tropical",
+    "description": "A large pre-Columbian city built by the Maya people of the Terminal Classic period.",
+    "fun_facts": ["El Castillo pyramid has 365 steps, representing the solar year", "Recently closed for extensive structural preservation and archaeological surveys"]
+  },
+  {
+    "_id": "",
+    "name": "Taj Mahal",
+    "location": {
+      "type": "Point",
+      "coordinates": [78.0421, 27.1751]
+    },
+    "status": "active",
+    "category": "historic",
+    "price_tier": "$",
+    "climate": "tropical",
+    "description": "An ivory-white marble mausoleum on the right bank of the river Yamuna in Agra, India.",
+    "fun_facts": ["Commissioned in 1632 by the Mughal emperor Shah Jahan", "Attracts over 7 million visitors a year"]
+  },
+  {
+    "_id": "",
+    "name": "Yosemite Valley",
+    "location": {
+      "type": "Point",
+      "coordinates": [-119.5383, 37.7456]
+    },
+    "status": "active",
+    "category": "nature",
+    "price_tier": "$$",
+    "climate": "temperate",
+    "description": "A glacial valley in Yosemite National Park in the western Sierra Nevada mountains of California.",
+    "fun_facts": ["Famous for its giant sequoia groves and granite cliffs like El Capitan", "A UNESCO World Heritage site since 1984"]
+  },
+  {
+    "_id": "",
+    "name": "Marina Bay Sands",
+    "location": {
+      "type": "Point",
+      "coordinates": [103.8590, 1.2834]
+    },
+    "status": "active",
+    "category": "city",
+    "price_tier": "$$$",
+    "climate": "tropical",
+    "description": "An integrated resort fronting Marina Bay in Singapore, known for its striking boat-shaped rooftop design.",
+    "fun_facts": ["Features a 150-meter infinity pool on the roof", "The resort includes a museum, casino, and massive shopping mall"]
+  },
+  {
+    "_id": "",
+    "name": "Mount Kilimanjaro",
+    "location": {
+      "type": "Point",
+      "coordinates": [37.3556, -3.0674]
+    },
+    "status": "active",
+    "category": "nature",
+    "price_tier": "$$$",
+    "climate": "alpine",
+    "description": "A dormant volcano in Tanzania and the highest single free-standing mountain above sea level in the world.",
+    "fun_facts": ["It has three distinct volcanic cones: Kibo, Mawenzi, and Shira", "Can be climbed without technical mountaineering equipment"]
+  },
+  {
+    "_id": "",
+    "name": "Seminyak Beach",
+    "location": {
+      "type": "Point",
+      "coordinates": [115.1542, -8.6913]
+    },
+    "status": "active",
+    "category": "beach",
+    "price_tier": "$$",
+    "climate": "tropical",
+    "description": "A mixed tourist and residential area on the west coast of Bali, known for its luxury hotels, villas, and spas.",
+    "fun_facts": ["Famous for spectacular ocean sunsets and upscale beach clubs", "Features some of the best high-end dining on the island"]
+  },
+  {
+    "_id": "",
+    "name": "Louvre Museum",
+    "location": {
+      "type": "Point",
+      "coordinates": [2.3376, 48.8606]
+    },
+    "status": "active",
+    "category": "historic",
+    "price_tier": "$$",
+    "climate": "temperate",
+    "description": "The world's most-visited museum and a historic monument in Paris, France.",
+    "fun_facts": ["Home to the Mona Lisa and the Venus de Milo", "The iconic glass pyramid was added to the main courtyard in 1989"]
+  },
+  {
+    "_id": "",
+    "name": "Chamonix Mont-Blanc",
+    "location": {
+      "type": "Point",
+      "coordinates": [6.8694, 45.9237]
+    },
+    "status": "active",
+    "category": "ski",
+    "price_tier": "$$$",
+    "climate": "alpine",
+    "description": "A resort area near the junction of France, Switzerland, and Italy, situated at the base of Mont Blanc.",
+    "fun_facts": ["Hosted the first Winter Olympics in 1924", "Renowned worldwide for extreme skiing and mountaineering"]
+  },
+  {
+    "_id": "",
+    "name": "Angkor Wat",
+    "location": {
+      "type": "Point",
+      "coordinates": [103.8670, 13.4125]
+    },
+    "status": "active",
+    "category": "historic",
+    "price_tier": "$",
+    "climate": "tropical",
+    "description": "A temple complex in Cambodia and the largest religious monument in the world by land area.",
+    "fun_facts": ["Originally constructed as a Hindu temple dedicated to the god Vishnu", "Appears on the national flag of Cambodia"]
+  },
+  {
+    "_id": "",
+    "name": "Maldives Atolls",
+    "location": {
+      "type": "Point",
+      "coordinates": [73.2207, 3.2028]
+    },
+    "status": "active",
+    "category": "beach",
+    "price_tier": "$$$",
+    "climate": "tropical",
+    "description": "An archipelagic state in South Asia, situated in the Indian Ocean, famous for its overwater bungalows.",
+    "fun_facts": ["It is the world's lowest-lying country", "Composed of 26 ring-shaped atolls made up of more than 1,000 coral islands"]
+  },
+  {
+    "_id": "",
+    "name": "Petra",
+    "location": {
+      "type": "Point",
+      "coordinates": [35.4444, 30.3285]
+    },
+    "status": "active",
+    "category": "historic",
+    "price_tier": "$$",
+    "climate": "arid",
+    "description": "A historical and archaeological city in southern Jordan, famous for its rock-cut architecture.",
+    "fun_facts": ["Also known as the 'Rose City' due to the color of the stone", "Access to the city is through a 1.2-kilometer-long gorge called the Siq"]
+  },
+  {
+    "_id": "",
+    "name": "Serengeti National Park",
+    "location": {
+      "type": "Point",
+      "coordinates": [34.8333, -2.3333]
+    },
+    "status": "active",
+    "category": "nature",
+    "price_tier": "$$$",
+    "climate": "tropical savanna",
+    "description": "A vast ecosystem in east-central Africa spanning northern Tanzania, known for its massive annual migration of wildebeest and zebra.",
+    "fun_facts": ["Hosts the largest terrestrial mammal migration in the world", "The name means 'endless plains' in the Maasai language"]
+  },
+  {
+    "_id": "",
+    "name": "Venice Canals",
+    "location": {
+      "type": "Point",
+      "coordinates": [12.3155, 45.4408]
+    },
+    "status": "active",
+    "category": "city",
+    "price_tier": "$$$",
+    "climate": "mediterranean",
+    "description": "A city in northeastern Italy built on a group of 118 small islands separated by canals and linked by over 400 bridges.",
+    "fun_facts": ["There are no roads in the city center, only canals and walking paths", "Gondolas have been used to navigate the city since the 11th century"]
+  },
+  {
+    "_id": "",
+    "name": "Waikiki Beach",
+    "location": {
+      "type": "Point",
+      "coordinates": [-157.8286, 21.2793]
+    },
+    "status": "active",
+    "category": "beach",
+    "price_tier": "$$",
+    "climate": "tropical",
+    "description": "A neighborhood of Honolulu on the south shore of the island of Oʻahu, world-famous for its white sand beach and surf.",
+    "fun_facts": ["Historically a retreat for Hawaiian royalty in the 1800s", "The name Waikiki means 'spouting fresh water' in the Hawaiian language"]
+  },
+  {
+    "_id": "",
+    "name": "Great Wall of China",
+    "location": {
+      "type": "Point",
+      "coordinates": [116.5704, 40.4319]
+    },
+    "status": "active",
+    "category": "historic",
+    "price_tier": "$",
+    "climate": "temperate",
+    "description": "A series of ancient fortifications built across the historical northern borders of ancient Chinese states and Imperial China.",
+    "fun_facts": ["Stretches over 21,000 kilometers in total length", "It is a myth that it can be seen from space with the naked eye"]
+  },
+  {
+    "_id": "",
+    "name": "Shibuya Crossing",
+    "location": {
+      "type": "Point",
+      "coordinates": [139.7021, 35.6595]
+    },
+    "status": "active",
+    "category": "city",
+    "price_tier": "$$",
+    "climate": "temperate",
+    "description": "A popular scramble crossing in Shibuya, Tokyo, often considered the busiest intersection in the world.",
+    "fun_facts": ["Up to 3,000 people can cross the street during a single light change", "Features the famous Hachikō statue at one of its main exits"]
+  },
+  {
+    "_id": "",
+    "name": "Torres del Paine",
+    "location": {
+      "type": "Point",
+      "coordinates": [-73.0000, -50.9423]
+    },
+    "status": "active",
+    "category": "nature",
+    "price_tier": "$$",
+    "climate": "subpolar",
+    "description": "A national park encompassing mountains, glaciers, lakes, and rivers in southern Chilean Patagonia.",
+    "fun_facts": ["Known for its three distinctive granite peaks shaped by glacial ice", "Features extreme and rapidly changing weather conditions"]
+  },
+  {
+    "_id": "",
+    "name": "Aspen Snowmass",
+    "location": {
+      "type": "Point",
+      "coordinates": [-106.9497, 39.2130]
+    },
+    "status": "active",
+    "category": "ski",
+    "price_tier": "$$$",
+    "climate": "alpine",
+    "description": "A winter resort complex located in Pitkin County, Colorado, featuring four separate skiing and snowboarding areas.",
+    "fun_facts": ["Snowmass is the largest of the four mountains, larger than the other three combined", "A premier destination for the Winter X Games"]
+  },
+  {
+    "_id": "",
+    "name": "Galápagos Islands",
+    "location": {
+      "type": "Point",
+      "coordinates": [-90.3166, -0.7773]
+    },
+    "status": "active",
+    "category": "nature",
+    "price_tier": "$$$",
+    "climate": "tropical",
+    "description": "A volcanic archipelago in the Pacific Ocean, considered one of the world's foremost destinations for wildlife-viewing.",
+    "fun_facts": ["Famous for its large number of endemic species studied by Charles Darwin", "Located exactly on the Equator"]
+  },
+  {
+    "_id": "",
+    "name": "Acropolis of Athens",
+    "location": {
+      "type": "Point",
+      "coordinates": [23.7257, 37.9715]
+    },
+    "status": "active",
+    "category": "historic",
+    "price_tier": "$$",
+    "climate": "mediterranean",
+    "description": "An ancient citadel located on a rocky outcrop above the city of Athens, containing the remains of several historically significant buildings.",
+    "fun_facts": ["The Parthenon is the most famous building in the complex", "Has withstood bombardments, earthquakes, and vandalism over 2,500 years"]
+  },
+  {
+    "_id": "",
+    "name": "Salar de Uyuni",
+    "location": {
+      "type": "Point",
+      "coordinates": [-67.3365, -20.1338]
+    },
+    "status": "active",
+    "category": "nature",
+    "price_tier": "$",
+    "climate": "arid",
+    "description": "The world's largest salt flat, spanning over 10,000 square kilometers in southwestern Bolivia.",
+    "fun_facts": ["Becomes a giant mirror reflecting the sky during the rainy season", "Contains a large percentage of the world's known lithium reserves"]
+  },
+  {
+    "_id": "",
+    "name": "Iguazu Falls",
+    "location": {
+      "type": "Point",
+      "coordinates": [-54.4367, -25.6953]
+    },
+    "status": "active",
+    "category": "nature",
+    "price_tier": "$$",
+    "climate": "subtropical",
+    "description": "The largest waterfall system in the world, located on the border of the Argentine province of Misiones and the Brazilian state of Paraná.",
+    "fun_facts": ["Consists of 275 individual waterfalls", "Eleanor Roosevelt reportedly exclaimed 'Poor Niagara!' upon seeing it"]
+  },
+  {
+    "_id": "",
+    "name": "Mount Rushmore",
+    "location": {
+      "type": "Point",
+      "coordinates": [-103.4591, 43.8791]
+    },
+    "status": "active",
+    "category": "historic",
+    "price_tier": "$",
+    "climate": "temperate",
+    "description": "A colossal sculpture carved into the granite face of Mount Rushmore in the Black Hills region of South Dakota.",
+    "fun_facts": ["Features the 60-foot heads of four US presidents", "Took 14 years and nearly 400 workers to complete"]
+  },
+  {
+    "_id": "",
+    "name": "Mykonos Island",
+    "location": {
+      "type": "Point",
+      "coordinates": [25.3289, 37.4415]
+    },
+    "status": "active",
+    "category": "beach",
+    "price_tier": "$$$",
+    "climate": "mediterranean",
+    "description": "A Greek island in the Cyclades group, known for its vibrant nightlife, beautiful beaches, and iconic 16th-century windmills.",
+    "fun_facts": ["According to mythology, it was formed from the petrified bodies of giants killed by Hercules", "Features a famous neighborhood known as 'Little Venice'"]
+  },
+  {
+    "_id": "",
+    "name": "Alhambra",
+    "location": {
+      "type": "Point",
+      "coordinates": [-3.5881, 37.1760]
+    },
+    "status": "active",
+    "category": "historic",
+    "price_tier": "$$",
+    "climate": "mediterranean",
+    "description": "A palace and fortress complex located in Granada, Andalusia, Spain, renowned for its stunning Islamic architecture.",
+    "fun_facts": ["The name translates to 'The Red One' in Arabic", "It was originally constructed as a small fortress in 889 AD"]
+  },
+  {
+    "_id": "",
+    "name": "Tulum Ruins",
+    "location": {
+      "type": "Point",
+      "coordinates": [-87.4295, 20.2114]
+    },
+    "status": "active",
+    "category": "beach",
+    "price_tier": "$$",
+    "climate": "tropical",
+    "description": "The site of a pre-Columbian Mayan walled city serving as a major port, situated on tall cliffs along the east coast of the Yucatán Peninsula.",
+    "fun_facts": ["One of the last cities built and inhabited by the Maya", "The only Mayan city built directly on the coast"]
+  },
+  {
+    "_id": "",
+    "name": "Milford Sound",
+    "location": {
+      "type": "Point",
+      "coordinates": [167.8974, -44.6716]
+    },
+    "status": "active",
+    "category": "nature",
+    "price_tier": "$$$",
+    "climate": "temperate rainforest",
+    "description": "A fiord in the southwest of New Zealand's South Island, known for towering Mitre Peak, rainforests and waterfalls.",
+    "fun_facts": ["Described by Rudyard Kipling as the 'eighth wonder of the world'", "Receives nearly 7 meters of rainfall annually"]
+  },
+  {
+    "_id": "",
+    "name": "Vatican City",
+    "location": {
+      "type": "Point",
+      "coordinates": [12.4534, 41.9029]
+    },
+    "status": "active",
+    "category": "historic",
+    "price_tier": "$$",
+    "climate": "mediterranean",
+    "description": "An independent city-state enclaved within Rome, Italy, and the headquarters of the Roman Catholic Church.",
+    "fun_facts": ["The smallest country in the world by both area and population", "Home to the Sistine Chapel ceiling painted by Michelangelo"]
+  },
+  {
+    "_id": "",
+    "name": "Niseko United",
+    "location": {
+      "type": "Point",
+      "coordinates": [140.6875, 42.8631]
+    },
+    "status": "active",
+    "category": "ski",
+    "price_tier": "$$$",
+    "climate": "alpine",
+    "description": "A premier ski resort area in Hokkaido, Japan, famous globally for its abundant, high-quality powder snow.",
+    "fun_facts": ["Averages an incredible 15 meters of snowfall per year", "Night skiing is exceptionally popular due to stadium-style lighting"]
+  },
+  {
+    "_id": "",
+    "name": "Table Mountain",
+    "location": {
+      "type": "Point",
+      "coordinates": [18.4036, -33.9628]
+    },
+    "status": "active",
+    "category": "nature",
+    "price_tier": "$$",
+    "climate": "mediterranean",
+    "description": "A prominent flat-topped mountain forming a prominent landmark overlooking the city of Cape Town in South Africa.",
+    "fun_facts": ["Often covered by a 'tablecloth' of orographic clouds", "One of the oldest mountains in the world, estimated to be 260 million years old"]
+  },
+  {
+    "_id": "",
+    "name": "Ha Long Bay",
+    "location": {
+      "type": "Point",
+      "coordinates": [107.1362, 20.9101]
+    },
+    "status": "active",
+    "category": "nature",
+    "price_tier": "$",
+    "climate": "tropical",
+    "description": "A UNESCO World Heritage Site in northeast Vietnam, known for its emerald waters and thousands of towering limestone islands topped by rainforests.",
+    "fun_facts": ["The name translates to 'descending dragon'", "Features numerous massive caves hidden inside the limestone karsts"]
   }
 ]
