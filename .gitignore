@@ -56,3 +56,5 @@ Thumbs.db
 .cache/
 __pycache__/
 **/__pycache__/
+ztmp/
+ztmp/**
