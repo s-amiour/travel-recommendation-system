@@ -1,17 +1,19 @@
-FROM python:3.9-slim
+FROM python:3.11-slim
 
-# Set working directory inside the container
-WORKDIR /app
+WORKDIR /backend
 
 # Copy requirements file and install dependencies
+# . instead of /backend/requirements.txt as target because we already set WORKDIR /backend
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy backend/ codebase (detects dockerfile's location folder is and copies all files in it)
-COPY . .
+COPY infra ./infra
+COPY app ./app
 
-# Expose the port FastAPI runs on
+# grant execute permissions to the file
+RUN chmod +x ./infra/entrypoint.sh
+
 EXPOSE 8000
 
-# Run the application using Uvicorn
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+# Run app using uvicorn
+CMD ["./infra/entrypoint.sh"]
