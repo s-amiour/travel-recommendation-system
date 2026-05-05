@@ -7,12 +7,11 @@ router = APIRouter(prefix="/dashboard", tags=["Dashboard"])
 def get_dashboard(user_id: str, lat: float, lng: float):
     # Neo4j
     rec_query = """
-    MATCH (u:User {id: $user_id})-[v1:VISITED]->(d:Destination)
-    WHERE v1.rating >= 4
-    MATCH (d)<-[v2:VISITED]-(other:User)-[v3:VISITED]->(rec:Destination)
-    WHERE v2.rating >= 4 AND v3.rating >= 4 AND NOT (u)-[:VISITED]->(rec)
+    MATCH (u:User {id: $user_id})-[:FRIENDS_WITH]-(friend:User)-[v:VISITED]->(rec:Destination)
+    WHERE v.rating >= 4 AND NOT (u)-[:VISITED]->(rec)
     RETURN rec.id AS destination_id, count(*) AS score
-    ORDER BY score DESC LIMIT 10
+    ORDER BY score DESC
+    LIMIT 5
     """
     with db.neo4j_driver.session() as session:
         rec_results = session.run(rec_query, user_id=user_id)
