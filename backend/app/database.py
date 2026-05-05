@@ -22,11 +22,9 @@ def connect_databases():
         db.mongo_db = db.mongo_client["travel_db"]  # Create DB if not exists
         db.mongo_client.admin.command('ping')  # Verify connectivity
 
-        # Partial Indexing
-        db.mongo_db.destinations.create_index(
-            [("location", "2dsphere"), ("category", 1), ("price_tier", 1)],
-            partialFilterExpression={"status": "active"} 
-        )
+        # Indexing
+        db.mongo_db.destinations.drop_indexes()
+        db.mongo_db.destinations.create_index([("location", "2dsphere"), ("category", 1), ("price_tier", 1)])
         print("Successful connection to MongoDB.")
     except Exception as e:
         print(f"Failed to connect to MongoDB: {e}")
