@@ -30,68 +30,68 @@
 
 **Goal:** Populate the databases with reliable, realistic mock data to test complex queries.
 
-* [ ] **Irina:** Develop MongoDB Destination schemas and Seed logic.
+* [x] **Irina:** Develop MongoDB Destination schemas and Seed logic.
   * Construct BSON documents for 50+ destinations including fields: `name`, `description`, `category`, `price_tier`, `status` (active/closed), and `location` (GeoJSON `Point`).
-* [ ] **Sultan:** Develop Neo4j Graph schema and Seed logic.
+* [x] **Sultan:** Develop Neo4j Graph schema and Seed logic.
   * Define nodes: `(User)`, `(Destination)`.
   * Define relationships: `[:VISITED {rating: Integer}]` AND `[:FRIENDS_WITH]`.
 * [ ] **Joseph:** Develop Redis Seed logic.
   * Inject initial ZSET data for `trending_destinations` so the frontend isn't blank on first boot.
-* [ ] **Together:** Write and execute `seed.py` inside the Docker container to populate all three databases simultaneously. **CRITICAL: Destination IDs must match perfectly across Mongo and Neo4j.**
+* [x] **Together:** Write and execute `seed.py` inside the Docker container to populate all three databases simultaneously. **CRITICAL: Destination IDs must match perfectly across Mongo and Neo4j.**
 
 ## Phase 3: DB Indexing & Core Query Logic
 
 **Goal:** Implement highly optimized queries utilizing database-specific strengths.
 
-### MongoDB Sub-Tasks (Irina)
+### MongoDB Sub-Tasks
 
-* [ ] **Create Compound Partial & Geospatial Indexes:**
-  * `db.destinations.createIndex({ "location": "2dsphere", "category": 1, "price_tier": 1 }, { partialFilterExpression: { status: "active" } })`
+* [x] **Create Compound & Geospatial Indexes:**
+  * `db.destinations.createIndex({ "location": "2dsphere", "category": 1, "price_tier": 1 })`
 * [ ] **Write Aggregation Pipeline 1 (`$geoNear`):**
   * Replace the `.find()` map query with a `$geoNear` pipeline that strictly projects `_id`, `name`, `location`, and a calculated `distance_in_meters`.
 * [ ] **Write Aggregation Pipeline 2 (Inventory Analytics):**
   * Write a pipeline using `$match` (active status), `$group` (by category/price), and `$sort` to analyze platform inventory.
 
-### Neo4j Sub-Tasks (Sultan)
+### Neo4j Sub-Tasks
 
 * [ ] **Create Neo4j Indexes:**
   * `CREATE INDEX dest_id FOR (d:Destination) ON (d.id);`
   * `CREATE INDEX user_id FOR (u:User) ON (u.id);`
-* [ ] **Write Cypher Collaborative Filtering Query (Fixed-Length):**
+* [x] **Write Cypher Collaborative Filtering Query (Fixed-Length):**
   * Find destinations visited by "Travel Twins" (similar users). Must include sentiment weighting: `WHERE v.rating >= 4`.
 * [ ] **Write Bounded Social Traversal Query (Variable-Length):**
   * Write a safe path traversal: `MATCH path = (u)-[:FRIENDS_WITH*1..2]-(network)-[v:VISITED]->(d)`. Must include rating filter and a strict `LIMIT 5` to prevent Supernode memory crashes.
 
-### Redis Sub-Tasks (Joseph)
+### Redis Sub-Tasks
 
-* [ ] **Implement ZSET Logic for Trends:**
+* [x] **Implement ZSET Logic for Trends:**
   * Write the logic to increment destination views: `ZINCRBY trending_destinations 1 {destination_id}`.
-* [ ] **Implement Read-Through Caching:**
+* [x] **Implement Read-Through Caching:**
   * Write the logic to cache the heavy top-10 trending calculations: `SET trending:top:10 "{json_payload}" EX 3600`. (DO NOT cache the GPS-dependent `/dashboard` orchestrator).
 
 ## Phase 4: Backend API Development
 
 **Goal:** Expose the database queries via RESTful endpoints in the `routers/` directory.
 
-* [ ] **Irina:** Build MongoDB Endpoints (`routers/destinations.py`).
-  * `GET /destinations/near` (Triggers Pipeline 1: `$geoNear`).
-  * `GET /analytics/inventory` (Triggers Pipeline 2: `$group` analytics).
-* [ ] **Sultan:** Build Neo4j Endpoints (`routers/dashboard.py`).
-  * `GET /dashboard/{user_id}` (The Orchestrator: Merges Collab Filtering, Redis Trending, and Mongo nearby pins into one JSON payload).
-  * `GET /dashboard/{user_id}/social` (Triggers the bounded path traversal query).
-* [ ] **Joseph:** Build Redis Endpoints (`routers/trending.py`).
-  * `GET /trending` (Triggers `ZREVRANGE` or fetches from cache).
-  * `POST /destinations/{id}/visit` (Logs clicks to ZSET and invalidates `trending:top:10` cache).
+* [ ] Build MongoDB Endpoints (`routers/destinations.py`).
+  * [ ] `GET /destinations/near` (Triggers Pipeline 1: `$geoNear`).
+  * [ ] `GET /analytics/inventory` (Triggers Pipeline 2: `$group` analytics).
+* [ ] Build Neo4j Endpoints (`routers/dashboard.py`).
+  * [x] `GET /dashboard/{user_id}` (The Orchestrator: Merges Collab Filtering, Redis Trending, and Mongo nearby pins into one JSON payload).
+  * [ ] `GET /dashboard/{user_id}/social` (Triggers the bounded path traversal query).
+* [x] Build Redis Endpoints (`routers/trending.py`).
+  * [x] `GET /trending` (Triggers `ZREVRANGE` or fetches from cache).
+  * [x] `POST /destinations/{destination_id}/visit` (Logs clicks to ZSET and invalidates `trending:top:10` cache).
 
 ## Phase 5: Streamlit Frontend Integration
 
 **Goal:** Build the UI based on the professor's advice.
 
-* [ ] **Sultan:**
+* [ ] Frontend Build
   * Build the Main Dashboard layout in `app.py`.
   * Set up the sidebar for user simulation.
   * Display the Neo4j recommendations and the social traversal network paths.
-* [ ] **Irina:** Integrate Map Visualizations.
+* [ ] Integrate Map Visualizations.
   * Use Streamlit's Mapbox integrations (`st.map` or `pydeck`) to plot the GeoJSON coordinates.
 
 ## Phase 6: Testing, Optimization, & Presentation Prep
