@@ -2,9 +2,11 @@ import os
 import json
 import random
 import redis
+import time
 from pymongo import MongoClient
 from neo4j import GraphDatabase
 from bson import ObjectId
+from neo4j.exceptions import ServiceUnavailable
 
 ########  Load/generate data   ########
 
@@ -22,6 +24,7 @@ def load_destinations_from_file(filepath="destinations.json"):
 
 
 def generate_users(count=20):
+    print(f"Generating {count} users")
     # using simple string IDs for users to keep graph traversal fast
     return [{"id": f"u{i}", "name": f"User {i}"} for i in range(1, count + 1)]
 
@@ -54,6 +57,7 @@ def seed_neo4j(neo4j_session, destinations, users):
             id=user["id"], name=user["name"]
         )
         
+    total_friendships = 0
     # 3. create [:FRIENDS_WITH] social network
     print(" -> Building randomized social network...")
     for user in users:
@@ -83,7 +87,6 @@ def seed_neo4j(neo4j_session, destinations, users):
                 u_id=user["id"], d_id=str(dest["_id"]), rating=rating
             )
 
-# Redis Seed
 
 def seed_redis(redis_client, destinations):
     print("Seeding Redis...")
@@ -93,11 +96,9 @@ def seed_redis(redis_client, destinations):
     for dest in destinations:
         initial_score = random.randint(0, 100)
         redis_client.zadd("trending_destinations", {str(dest["_id"]): initial_score})
-
     print(" -> Trending ZSET baseline established.")
 
 ########  Executor   ########
-
 
 def main():
     print("Starting Polyglot Database Seeding Pipeline...")
@@ -109,12 +110,11 @@ def main():
         auth=(os.getenv("NEO4J_USER", "neo4j"), os.getenv("NEO4J_PASSWORD", "password123"))
     )
     redis_client = redis.Redis(
-        host=os.getenv("REDIS_HOST", "localhost"),
-        port=int(os.getenv("REDIS_PORT", 6379)),
+        host=os.getenv("REDIS_HOST", "localhost"), 
+        port=int(os.getenv("REDIS_PORT", 6379)), 
         decode_responses=True
-)
-    # Redis driver
-
+    )
+    print("Successful driver connections.")
 
     mongo_db = mongo_client["travel_db"]
     
@@ -129,12 +129,21 @@ def main():
         seed_mongodb(mongo_db, destinations)
         
         # 3. push Data to Neo4j (Graph Storage)
-        with neo4j_driver.session() as session:
-            seed_neo4j(session, destinations, users)
+        # Neo4j takes, in worst case, 20-30s to boot up
+        while True:
+            try:
+                with neo4j_driver.session() as session:
+                    # Test the connection with a tiny query
+                    session.run("RETURN 1")
+                    # If we reach here, Neo4j is awake
+                    seed_neo4j(session, destinations, users)
+                    break
+            except ServiceUnavailable:
+                print("Neo4j is still booting... retrying in 2s")
+                time.sleep(2)
             
         # 4. push Data to Redis (Cache Storage)
         seed_redis(redis_client, destinations)
-        
         
         print("\nSeeding Complete. All Database IDs are strictly synchronized.")
         
