@@ -35,7 +35,7 @@
 * [x] **Sultan:** Develop Neo4j Graph schema and Seed logic.
   * Define nodes: `(User)`, `(Destination)`.
   * Define relationships: `[:VISITED {rating: Integer}]` AND `[:FRIENDS_WITH]`.
-* [ ] **Joseph:** Develop Redis Seed logic.
+* [x] **Joseph:** Develop Redis Seed logic.
   * Inject initial ZSET data for `trending_destinations` so the frontend isn't blank on first boot.
 * [x] **Together:** Write and execute `seed.py` inside the Docker container to populate all three databases simultaneously. **CRITICAL: Destination IDs must match perfectly across Mongo and Neo4j.**
 
