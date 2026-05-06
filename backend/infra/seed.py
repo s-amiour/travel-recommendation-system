@@ -39,6 +39,10 @@ def seed_mongodb(mongo_db, destinations):
 def seed_neo4j(neo4j_session, destinations, users):
     print("Seeding Neo4j...")
     neo4j_session.run("MATCH (n) DETACH DELETE n")  # wipe old graph
+
+    # Create indexes to avoid full-table scans in dashboard queries
+    neo4j_session.run("CREATE INDEX dest_id IF NOT EXISTS FOR (d:Destination) ON (d.id)")
+    neo4j_session.run("CREATE INDEX user_id IF NOT EXISTS FOR (u:User) ON (u.id)")
     
     # 1. create destination nodes (CRITICAL: Stringify the BSON ObjectId)
     for dest in destinations:

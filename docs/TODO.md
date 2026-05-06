@@ -54,7 +54,7 @@
 
 ### Neo4j Sub-Tasks
 
-* [ ] **Create Neo4j Indexes:**
+* [x] **Create Neo4j Indexes:**
   * `CREATE INDEX dest_id FOR (d:Destination) ON (d.id);`
   * `CREATE INDEX user_id FOR (u:User) ON (u.id);`
 * [x] **Write Cypher Collaborative Filtering Query (Fixed-Length):**
