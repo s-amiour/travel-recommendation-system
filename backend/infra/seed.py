@@ -1,6 +1,7 @@
 import os
 import json
 import random
+import redis
 from pymongo import MongoClient
 from neo4j import GraphDatabase
 from bson import ObjectId
@@ -84,6 +85,16 @@ def seed_neo4j(neo4j_session, destinations, users):
 
 # Redis Seed
 
+def seed_redis(redis_client, destinations):
+    print("Seeding Redis...")
+    redis_client.flushdb()  # Wipe old cache
+    
+    # assign baseline scores for each destination
+    for dest in destinations:
+        initial_score = random.randint(0, 100)
+        redis_client.zadd("trending_destinations", {str(dest["_id"]): initial_score})
+
+    print(" -> Trending ZSET baseline established.")
 
 ########  Executor   ########
 
@@ -97,6 +108,11 @@ def main():
         os.getenv("NEO4J_URI", "bolt://localhost:7687"), 
         auth=(os.getenv("NEO4J_USER", "neo4j"), os.getenv("NEO4J_PASSWORD", "password123"))
     )
+    redis_client = redis.Redis(
+        host=os.getenv("REDIS_HOST", "localhost"),
+        port=int(os.getenv("REDIS_PORT", 6379)),
+        decode_responses=True
+)
     # Redis driver
 
 
@@ -117,6 +133,7 @@ def main():
             seed_neo4j(session, destinations, users)
             
         # 4. push Data to Redis (Cache Storage)
+        seed_redis(redis_client, destinations)
         
         
         print("\nSeeding Complete. All Database IDs are strictly synchronized.")
