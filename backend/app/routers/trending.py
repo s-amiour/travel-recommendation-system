@@ -8,7 +8,7 @@ router = APIRouter(prefix="/trending", tags=["Trending"])
 """
     Retrieve most visited locations.
 
-    Utilizes "Cache-Aside" & "Read-Through" pattern to prevent stressing Redis sorted set CPU on every single page load.
+    Utilizes "Cache-Aside" pattern to prevent stressing Redis sorted set CPU on every single page load.
     Acts as the cold start fallback recommendations, i.e. when client registers for first time.
 
     Parameters:

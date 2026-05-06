@@ -74,7 +74,7 @@ ORDER BY score DESC LIMIT 10
   * Write the logic to increment destination views: `ZINCRBY trending_destinations 1 {destination_id}`.
 * [x] **Implement Read-Through Caching:**
   * Write the logic to cache the heavy top-10 trending calculations: `SET trending:top:10 "{json_payload}" EX 3600`. (DO NOT cache the GPS-dependent `/dashboard` orchestrator).
-* [ ] **Doc Update:** Rename "Read-Through" to "Cache-Aside" in docstring for accuracy.
+* [x] **Doc Update:** Rename "Read-Through" to "Cache-Aside" in docstring for accuracy.
 
 ## Phase 4: Streamlit Frontend Integration
 
