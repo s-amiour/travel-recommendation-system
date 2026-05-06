@@ -39,28 +39,34 @@
   * Inject initial ZSET data for `trending_destinations` so the frontend isn't blank on first boot.
 * [x] **Together:** Write and execute `seed.py` inside the Docker container to populate all three databases simultaneously. **CRITICAL: Destination IDs must match perfectly across Mongo and Neo4j.**
 
-## Phase 3: DB Indexing & Core Query Logic
+## Phase 3: DB Indexing & Hardening
 
-**Goal:** Implement highly optimized queries utilizing database-specific strengths.
+**Goal:** The system works, but these steps prevent it from crashing or returning empty data during the demo.
 
 ### MongoDB Sub-Tasks
 
 * [x] **Create Compound & Geospatial Indexes:**
   * `db.destinations.createIndex({ "location": "2dsphere", "category": 1, "price_tier": 1 })`
-* [ ] **Write Aggregation Pipeline 1 (`$geoNear`):**
-  * Replace the `.find()` map query with a `$geoNear` pipeline that strictly projects `_id`, `name`, `location`, and a calculated `distance_in_meters`.
-* [ ] **Write Aggregation Pipeline 2 (Inventory Analytics):**
-  * Write a pipeline using `$match` (active status), `$group` (by category/price), and `$sort` to analyze platform inventory.
+* [ ] **Refactor `/near` for UI Distances:** Upgrade the `db.mongo_db.destinations.find()` query to an `aggregate([{ "$geoNear": ... }])` pipeline so the UI can display exact "Distance in Meters" to the user.
 
 ### Neo4j Sub-Tasks
 
-* [x] **Create Neo4j Indexes:**
-  * `CREATE INDEX dest_id FOR (d:Destination) ON (d.id);`
-  * `CREATE INDEX user_id FOR (u:User) ON (u.id);`
+* [x] **Create Production Indexes (Critical):** Run these in Neo4j browser or add to `seed.py` so the dashboard doesn't perform full-table scans:
+  * `CREATE INDEX dest_id IF NOT EXISTS FOR (d:Destination) ON (d.id);`
+  * `CREATE INDEX user_id IF NOT EXISTS FOR (u:User) ON (u.id);`
 * [x] **Write Cypher Collaborative Filtering Query (Fixed-Length):**
   * Find destinations visited by "Travel Twins" (similar users). Must include sentiment weighting: `WHERE v.rating >= 4`.
-* [ ] **Write Bounded Social Traversal Query (Variable-Length):**
-  * Write a safe path traversal: `MATCH path = (u)-[:FRIENDS_WITH*1..2]-(network)-[v:VISITED]->(d)`. Must include rating filter and a strict `LIMIT 5` to prevent Supernode memory crashes.
+* [ ] **Upgrade the Recommendation Engine:** Replace the 1-hop query in `dashboard.py` with the Variable-Length Bounded Traversal to prevent "Ghost Town" empty results for users with few friends.
+
+```cypher
+MATCH (u:User {id: $user_id})-[:FRIENDS_WITH*1..2]-(network_user)
+WHERE u <> network_user 
+WITH DISTINCT network_user
+MATCH (network_user)-[v:VISITED]->(d:Destination)
+WHERE v.rating >= 4
+RETURN d.id AS destination_id, COUNT(network_user) AS score
+ORDER BY score DESC LIMIT 10
+```
 
 ### Redis Sub-Tasks
 
@@ -68,37 +74,28 @@
   * Write the logic to increment destination views: `ZINCRBY trending_destinations 1 {destination_id}`.
 * [x] **Implement Read-Through Caching:**
   * Write the logic to cache the heavy top-10 trending calculations: `SET trending:top:10 "{json_payload}" EX 3600`. (DO NOT cache the GPS-dependent `/dashboard` orchestrator).
+* [ ] **Doc Update:** Rename "Read-Through" to "Cache-Aside" in docstring for accuracy.
 
-## Phase 4: Backend API Development
+## Phase 4: Streamlit Frontend Integration
 
-**Goal:** Expose the database queries via RESTful endpoints in the `routers/` directory.
+**Goal:** Currently, `app.py` just pings the backend. We need to wire it up to the polyglot endpoints.
 
-* [ ] Build MongoDB Endpoints (`routers/destinations.py`).
-  * [ ] `GET /destinations/near` (Triggers Pipeline 1: `$geoNear`).
-  * [ ] `GET /analytics/inventory` (Triggers Pipeline 2: `$group` analytics).
-* [ ] Build Neo4j Endpoints (`routers/dashboard.py`).
-  * [x] `GET /dashboard/{user_id}` (The Orchestrator: Merges Collab Filtering, Redis Trending, and Mongo nearby pins into one JSON payload).
-  * [ ] `GET /dashboard/{user_id}/social` (Triggers the bounded path traversal query).
-* [x] Build Redis Endpoints (`routers/trending.py`).
-  * [x] `GET /trending` (Triggers `ZREVRANGE` or fetches from cache).
-  * [x] `POST /destinations/{destination_id}/visit` (Logs clicks to ZSET and invalidates `trending:top:10` cache).
+* [ ] **User & Location Context UI:** Add Streamlit `st.selectbox` to let the tester pick one of the 20 bot `user_id`s.
+  * Add input fields (or a map/dropdown of preset cities) to capture `lat` and `lng`.
+* [ ] **Consume the Dashboard Endpoint:**
+  * Trigger `GET /dashboard/{user_id}?lat={lat}&lng={lng}` when the user submits their context.
+* [ ] **Render the 3 Data Tiers:**
+  * Create UI section for "Network Recommendations" (Iterate over `response["recommendations"]`).
+  * Create UI section for "Trending Globally" (Iterate over `response["trending"]`). Display the `trending_score`.
+  * Create UI section for "Nearby Discoveries" (Iterate over `response["nearby"]`).
+* [ ] **Wire the "Visit/Read More" Trigger:**
+  * Add a Streamlit `st.button` under each destination card.
+  * When clicked, fire `POST` request to `/destinations/{destination_id}/visit` to increment Redis score and trigger cache invalidation.
 
-## Phase 5: Streamlit Frontend Integration
-
-**Goal:** Build the UI based on the professor's advice.
-
-* [ ] Frontend Build
-  * Build the Main Dashboard layout in `app.py`.
-  * Set up the sidebar for user simulation.
-  * Display the Neo4j recommendations and the social traversal network paths.
-* [ ] Integrate Map Visualizations.
-  * Use Streamlit's Mapbox integrations (`st.map` or `pydeck`) to plot the GeoJSON coordinates.
-
-## Phase 6: Testing, Optimization, & Presentation Prep
+## Phase 5: Beta Polish
 
 **Goal:** Ensure everything runs fast and prepare to defend your architectural choices.
 
-* [ ] **Irina:** Run `.explain("executionStats")` on Mongo pipelines to prove the partial indexes are working.
-* [ ] **Sultan:** Run `PROFILE` on Cypher queries to prove the `*1..2` boundary prevents `AllNodesScan`s.
-* [ ] **Joseph:** Verify the Cache Invalidation works using the Redis CLI `TTL trending:top:10` command (ensure it deletes and resets when a destination is visited).
-* [ ] **Together:** Finalize the presentation, defending the polyglot persistence architecture and detailing the specific native-driver implementations used.
+* [ ] **Verify Seed Data Accuracy:** Ensure MongoDB `_ids`, Neo4j `id`s, and Redis `destination_ids` perfectly match across the databases so the "hydration" step in the dashboard doesn't return empty JSON objects.
+* [ ] **Test the Cache Reset:** Click "Read More" button on a destination, refresh the Streamlit page, and visually verify its score went up in the "Trending Globally" section.
+* [ ] **Clean Docker Logs:** Run `docker-compose up --build` and ensure no `500 Internal Server Error` or `Connection Refused` traces appear during cold boot.
