@@ -51,7 +51,7 @@
 
 ### Neo4j Sub-Tasks
 
-* [ ] **Create Production Indexes (Critical):** Run these in Neo4j browser or add to `seed.py` so the dashboard doesn't perform full-table scans:
+* [x] **Create Production Indexes (Critical):** Run these in Neo4j browser or add to `seed.py` so the dashboard doesn't perform full-table scans:
   * `CREATE INDEX dest_id IF NOT EXISTS FOR (d:Destination) ON (d.id);`
   * `CREATE INDEX user_id IF NOT EXISTS FOR (u:User) ON (u.id);`
 * [x] **Write Cypher Collaborative Filtering Query (Fixed-Length):**
