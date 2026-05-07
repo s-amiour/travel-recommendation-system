@@ -56,7 +56,7 @@
   * `CREATE INDEX user_id IF NOT EXISTS FOR (u:User) ON (u.id);`
 * [x] **Write Cypher Collaborative Filtering Query (Fixed-Length):**
   * Find destinations visited by "Travel Twins" (similar users). Must include sentiment weighting: `WHERE v.rating >= 4`.
-* [ ] **Upgrade the Recommendation Engine:** Replace the 1-hop query in `dashboard.py` with the Variable-Length Bounded Traversal to prevent "Ghost Town" empty results for users with few friends.
+* [x] **Upgrade the Recommendation Engine:** Replace the 1-hop query in `dashboard.py` with the Variable-Length Bounded Traversal to prevent "Ghost Town" empty results for users with few friends.
 
 ```cypher
 MATCH (u:User {id: $user_id})-[:FRIENDS_WITH*1..2]-(network_user)
