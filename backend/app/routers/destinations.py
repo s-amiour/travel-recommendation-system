@@ -8,41 +8,58 @@ router = APIRouter(prefix="/destinations", tags=["Destinations"])
 @router.get("/near")
 def get_nearby(lat: float, lng: float, category: Optional[str] = None, price_tier: Optional[str] = None, limit: int = 5):
     filters = {}
-    if category: filters["category"] = category
-    if price_tier: filters["price_tier"] = price_tier
+    if category:
+        filters["category"] = category
+    if price_tier:
+        filters["price_tier"] = price_tier
 
-    query_local = {
-        "location": {
-            "$near": {
-                "$geometry": {"type": "Point", "coordinates": [lng, lat]},
-                "$maxDistance": 50000
-            }
-        },
-        **filters
+    geo_near_stage = {
+        "$geoNear": {
+            "near": {"type": "Point", "coordinates": [lng, lat]},
+            "distanceField": "distance_in_meters",
+            "spherical": True,
+            "maxDistance": 50000,
+            "query": filters
+        }
     }
 
-    results = list(db.mongo_db.destinations.find(
-        query_local, 
-        {"_id": 1, "location": 1, "name": 1, "category": 1, "price_tier": 1}
-    ).limit(limit))
-    
+    project_stage = {
+        "$project": {
+            "_id": 1,
+            "location": 1,
+            "name": 1,
+            "category": 1,
+            "price_tier": 1,
+            "distance_in_meters": 1
+        }
+    }
+
+    results = list(db.mongo_db.destinations.aggregate([
+        geo_near_stage,
+        project_stage,
+        {"$limit": limit}
+    ]))
+
     warning_flag = False
 
-    # Query 1 returns [] => execute Query 2
+    # Query 1 returns [] => execute Query 2 without maxDistance
     if not results:
         warning_flag = True
-        query_global = {
-            "location": {
-                "$near": {
-                    "$geometry": {"type": "Point", "coordinates": [lng, lat]}
-                }
-            },
-            **filters
+
+        geo_near_stage_global = {
+            "$geoNear": {
+                "near": {"type": "Point", "coordinates": [lng, lat]},
+                "distanceField": "distance_in_meters",
+                "spherical": True,
+                "query": filters
+            }
         }
-        results = list(db.mongo_db.destinations.find(
-            query_global, 
-            {"_id": 1, "location": 1, "name": 1, "category": 1, "price_tier": 1}
-        ).limit(limit))
+
+        results = list(db.mongo_db.destinations.aggregate([
+            geo_near_stage_global,
+            project_stage,
+            {"$limit": limit}
+        ]))
 
     # Data Hydration
     destinations = []
