@@ -9,9 +9,12 @@ router = APIRouter(prefix="/dashboard", tags=["Dashboard"])
 def get_dashboard(user_id: str, lat: float, lng: float):
     # 1. Extract results of recommendation logic to a list
     rec_query = """
-    MATCH (u:User {id: $user_id})-[:FRIENDS_WITH]-(friend:User)-[v:VISITED]->(rec:Destination)
-    WHERE v.rating >= 4 AND NOT (u)-[:VISITED]->(rec)
-    RETURN rec.id AS destination_id, count(*) AS score
+    MATCH (u:User {id: $user_id})-[:FRIENDS_WITH*1..2]-(network_user)
+    WHERE u <> network_user 
+    WITH DISTINCT network_user, u
+    MATCH (network_user)-[v:VISITED]->(d:Destination)
+    WHERE v.rating >= 4 AND NOT (u)-[:VISITED]->(d)
+    RETURN d.id AS destination_id, COUNT(network_user) AS score
     ORDER BY score DESC LIMIT 10
     """
     with db.neo4j_driver.session() as session:
