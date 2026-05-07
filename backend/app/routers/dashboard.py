@@ -59,15 +59,18 @@ def get_dashboard(user_id: str, lat: float, lng: float):
             full_dest["trending_score"] = trend["score"]
             final_trending.append(full_dest)
 
-    # 5. Proximity (geospatial) query
-    nearby_cursor = db.mongo_db.destinations.find({
-        "location": {
-            "$near": {
-                "$geometry": {"type": "Point", "coordinates": [lng, lat]},
-                "$maxDistance": 50000
+    # 5. Proximity (geospatial) query (Removed $project to expose full metadata)
+    nearby_cursor = db.mongo_db.destinations.aggregate([
+        {
+            "$geoNear": {
+                "near": {"type": "Point", "coordinates": [lng, lat]},
+                "distanceField": "distance_in_meters",
+                "spherical": True,
+                "maxDistance": 50000
             }
-        }
-    }, {"_id": 1, "location": 1, "name": 1, "category": 1}).limit(5)
+        },
+        {"$limit": 5}
+    ])
     
     final_nearby = []
     for doc in nearby_cursor:
