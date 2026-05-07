@@ -47,7 +47,7 @@
 
 * [x] **Create Compound & Geospatial Indexes:**
   * `db.destinations.createIndex({ "location": "2dsphere", "category": 1, "price_tier": 1 })`
-* [ ] **Refactor `/near` for UI Distances:** Upgrade the `db.mongo_db.destinations.find()` query to an `aggregate([{ "$geoNear": ... }])` pipeline so the UI can display exact "Distance in Meters" to the user.
+* [x] **Refactor `/near` for UI Distances:** Upgrade the `db.mongo_db.destinations.find()` query to an `aggregate([{ "$geoNear": ... }])` pipeline so the UI can display exact "Distance in Meters" to the user.
 
 ### Neo4j Sub-Tasks
 
