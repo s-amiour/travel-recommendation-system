@@ -56,7 +56,7 @@ docker-compose up -d
 * **Frontend (Streamlit):** `http://localhost:8501`
 * **Neo4j Browser:** `http://localhost:7474`
 
-## API Endpoints (To Be Implemented)
+## API Endpoints
 
 * `GET /destinations/near` - Find nearby destinations using MongoDB spatial queries.
 * `GET /users/{id}/recommendations` - Get personalized collaborative filtering recommendations from Neo4j.
