@@ -20,14 +20,14 @@ The architecture of the project will utilise microservices orchestrated via Dock
   * Implements a 1-hour TTL dashboard cache to optimize heavy query execution.
 * **Infrastructure:** Docker & Docker Compose
 
-## Features to be Implemented
+## Feature
 
 1. **Geolocation Search:** Instantly find destinations within a specific radius of the user's current coordinates.
 2. **Personalized Graph Recommendations:** Suggests unvisited destinations matching user preferences, ranked higher if similar users have visited them.
 3. **Real-Time Trending Board:** A constantly updated list of trending destinations based on user views and visits.
 4. **Optimized Caching:** Aggregated dashboard results are cached in Redis to minimize database load.
 
-## Setup to be Implemented
+## Setup
 
 ### Pre-requisites
 
@@ -51,17 +51,9 @@ Launch MongoDB, Neo4j, Redis, and the Backend API containers.
 docker-compose up -d
 ```
 
-3. **Run the Seed Script**
-Populate the databases with mock users, active destinations, relationship graphs, and initial trends.
-
-```bash
-docker exec -it backend-container python seed.py
-```
-
 4. **Access the Application**
 
 * **Frontend (Streamlit):** `http://localhost:8501`
-* **Backend API Docs:** `http://localhost:8000/docs`
 * **Neo4j Browser:** `http://localhost:7474`
 
 ## API Endpoints (To Be Implemented)
